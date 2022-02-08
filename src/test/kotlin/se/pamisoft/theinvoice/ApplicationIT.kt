@@ -2,12 +2,12 @@ package se.pamisoft.theinvoice
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
-class TheInvoiceApplicationTests {
-
+@ActiveProfiles("test")
+class ApplicationIT {
 	@Test
-	fun contextLoads() {
+	fun `Should load context`() {
 	}
-
 }

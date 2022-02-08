@@ -1,10 +1,10 @@
-package se.pamisoft.theinvoice
+package se.pamisoft.theinvoice.development
 
+import se.pamisoft.theinvoice.*
 import se.pamisoft.theinvoice.Delivery.E_INVOICE
+import se.pamisoft.theinvoice.Delivery.POST
 import java.time.LocalDate
 import java.util.UUID
-
-// TODO rename file
 
 fun guardian(
     id: UUID= GUARDIAN_ID1,
@@ -25,7 +25,7 @@ fun family(
     personalIdentityNumber: PersonalIdentityNumber = PERSONAL_IDENTITY_NUMBER,
     delivery: Delivery = E_INVOICE,
     email: String = "john@gmail.com",
-    address: Address? = null,
+    address: Address? = address().takeIf { delivery == POST },
     externalReference: String? = null,
     endedOn: LocalDate? = null
 ) = Family(id, guardian1, guardian2 , personalIdentityNumber, delivery, email, address, externalReference, endedOn)
@@ -45,4 +45,4 @@ val FAMILY_ID2: UUID = UUID.randomUUID()
 val GUARDIAN_ID1: UUID = UUID.randomUUID()
 val GUARDIAN_ID2: UUID = UUID.randomUUID()
 val PERSONAL_IDENTITY_NUMBER = PersonalIdentityNumber("19890201-3286")
-val NOW = LocalDate.now()
+val NOW: LocalDate = LocalDate.now()

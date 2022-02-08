@@ -1,9 +1,24 @@
 package se.pamisoft.theinvoice
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import dev.personnummer.Personnummer
 import se.pamisoft.theinvoice.Delivery.POST
 import java.time.LocalDate
 import java.util.UUID
 
+@JsonPropertyOrder(
+    "id",
+    "name",
+    "guardian1",
+    "guardian2",
+    "personalIdentityNumber",
+    "delivery",
+    "email",
+    "address",
+    "externalReference",
+    "endedOn"
+)
 data class Family(
     val id: UUID,
     val guardian1: Guardian,
@@ -15,6 +30,7 @@ data class Family(
     val externalReference: String? = null,
     val endedOn: LocalDate? = null
 ) {
+    @JsonIgnore
     val guardians = listOfNotNull(guardian1, guardian2)
 
     val name = guardian2?.let {
@@ -26,9 +42,15 @@ data class Family(
     }
 }
 
-// TODO: complete
 @JvmInline
-value class PersonalIdentityNumber(val value: String)
+value class PersonalIdentityNumber private constructor(val value: String) {
+    companion object {
+        operator fun invoke(value: String): PersonalIdentityNumber =
+            PersonalIdentityNumber(Personnummer.parse(value).run {
+                "$fullYear$month$day${separator()}$numbers"
+            })
+    }
+}
 
 data class Address(
     val address: String,

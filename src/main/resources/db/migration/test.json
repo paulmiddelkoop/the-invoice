@@ -1,0 +1,24 @@
+{
+  "id": "097904f9-e729-41a6-ba2a-a985aeac9ed2",
+  "name": "John & Jane Doe",
+  "guardian1": {
+    "id": "6814bb9f-dac3-4f79-9479-e7f6a2def0aa",
+    "firstName": "John",
+    "lastName": "Doe"
+  },
+  "guardian2": {
+    "id": "d5399daf-35ef-454d-ab5c-edcc347c3474",
+    "firstName": "Jane",
+    "lastName": "Doe"
+  },
+  "personalIdentityNumber": "19890201-3286",
+  "delivery": "POST",
+  "email": "john@gmail.com",
+  "address": {
+    "address": "Main street 42",
+    "zipCode": "10014",
+    "city": "New York"
+  },
+  "externalReference": "E1",
+  "endedOn": "2022-02-08"
+}

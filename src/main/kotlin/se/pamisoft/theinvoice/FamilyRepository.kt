@@ -86,9 +86,9 @@ private fun Family.toMap() = mapOf(
 private fun ResultSet.getFamily(): Family {
     val delivery = Delivery.of(getString("delivery"))
     return Family(
-        id = getUUID("id")!!, // TODO beautify !!
+        id = getRequiredUuid("id"),
         guardian1 = getGuardian(1),
-        guardian2 = getUUID("guardian2_id")?.let { getGuardian(2) },
+        guardian2 = getUuid("guardian2_id")?.let { getGuardian(2) },
         personalIdentityNumber = PersonalIdentityNumber(getString("personal_identity_number")),
         delivery = delivery,
         email = getString("email"),
@@ -98,10 +98,9 @@ private fun ResultSet.getFamily(): Family {
     )
 }
 
-// TODO beautify
 private fun ResultSet.getGuardian(index: Int) =
     Guardian(
-        id = getUUID("guardian${index}_id")!!,
+        id = getRequiredUuid("guardian${index}_id"),
         firstName = getString("guardian${index}_first_name"),
         lastName = getString("guardian${index}_last_name")
     )

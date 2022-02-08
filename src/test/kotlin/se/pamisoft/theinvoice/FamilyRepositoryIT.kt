@@ -3,20 +3,13 @@ package se.pamisoft.theinvoice
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.ComponentScan.Filter
 import org.springframework.jdbc.core.JdbcTemplate
-import org.springframework.stereotype.Repository
 import org.springframework.test.jdbc.JdbcTestUtils.countRowsInTableWhere
 import se.pamisoft.theinvoice.Delivery.POST
+import se.pamisoft.theinvoice.development.*
 import java.time.LocalDate.now
 
-@JdbcTest
-@AutoConfigureTestDatabase(replace = NONE)
-@ComponentScan(includeFilters = [Filter(Repository::class)]) // TODO make @RepositoryTest
+@RepositoryTest
 class FamilyRepositoryIT(
     @Autowired private val repository: FamilyRepository,
     @Autowired private val db: JdbcTemplate

@@ -10,13 +10,13 @@ import java.util.UUID
 @RequestMapping("/api/v1/families")
 class FamilyController(private val familyRepository: FamilyRepository) {
 
-    @GetMapping("/")
+    @GetMapping
     fun all(): List<Family> =
         familyRepository.findAll().sortedBy { it.name }
 
     @GetMapping("/{id}")
     fun one(@PathVariable id: UUID): Family =
-        familyRepository.findById(id) ?: throw ResponseStatusException(NOT_FOUND, "Unknown family $id.");
+        familyRepository.findById(id) ?: throw ResponseStatusException(NOT_FOUND, "Unknown family $id.")
 
     // TODO: check guardian id is not changed
     @PutMapping("/{id}")

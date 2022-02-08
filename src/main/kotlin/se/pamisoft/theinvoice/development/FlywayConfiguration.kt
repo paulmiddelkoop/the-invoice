@@ -1,11 +1,13 @@
-package se.pamisoft.theinvoice
+package se.pamisoft.theinvoice.development
 
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy
-import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Profile
 
-@TestConfiguration
-class TestConfig {
+@Configuration
+@Profile("dev", "test")
+class FlywayConfiguration {
     @Bean
     fun flywayMigrationStrategy() =
         FlywayMigrationStrategy { flyway ->
