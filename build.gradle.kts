@@ -2,6 +2,8 @@ import org.gradle.api.JavaVersion.VERSION_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.run.BootRun
 
+val jacocoVersion by extra("0.8.7")
+
 plugins {
 	id("org.springframework.boot") version "2.6.3"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
@@ -34,8 +36,8 @@ dependencies {
 	implementation("dev.personnummer:personnummer:3.3.3")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:${dependencyManagement.importedProperties["mockito.version"]}")
-	jacocoAnt("org.jacoco:org.jacoco.ant")
-	jacocoAgent("org.jacoco:org.jacoco.agent")
+	jacocoAnt("org.jacoco:org.jacoco.ant:$jacocoVersion")
+	jacocoAgent("org.jacoco:org.jacoco.agent:$jacocoVersion")
 }
 
 tasks.withType<KotlinCompile> {
@@ -49,8 +51,9 @@ tasks.getByName<BootRun>("bootRun") {
 	systemProperty("spring.profiles.active", "dev")
 }
 
-tasks.withType<Test> {
+tasks.test {
 	useJUnitPlatform()
+	finalizedBy(tasks.jacocoTestReport)
 }
 
 tasks.jacocoTestReport {
