@@ -16,7 +16,7 @@ jobs:
         env:
           POSTGRES_USER: the_invoice
           POSTGRES_PASSWORD: the_invoice
-          POSTGRES_DB: the_invoice_test
+          POSTGRES_DB: the_invoice
         ports:
           - 5432:5432
         options: >-
@@ -26,8 +26,6 @@ jobs:
           --health-retries 5
 
     steps:
-      - name: Add uuid support to postgres
-        run: psql postgresql://the_invoice:the_invoice@localhost:5432/the_invoice_test -c 'create extension if not exists "uuid-ossp"'
       - uses: actions/checkout@v2
       - name: Set up JDK 17
         uses: actions/setup-java@v2

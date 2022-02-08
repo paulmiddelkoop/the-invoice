@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import se.pamisoft.theinvoice.FamilyRepository
 
 @Component
-@Profile("dev")
+@Profile("!test")
 class DataLoader(private val familyRepository: FamilyRepository): ApplicationRunner {
     override fun run(args: ApplicationArguments?) {
         familyRepository.upsert(family())
