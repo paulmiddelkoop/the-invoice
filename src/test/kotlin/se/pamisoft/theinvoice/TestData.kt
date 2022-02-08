@@ -37,7 +37,7 @@ fun singleParentFamily(
     delivery: Delivery = E_INVOICE,
     email: String = "john@gmail.com",
     externalReference: String? = null,
-    endedOn: LocalDate? = null
+    endedOn: LocalDate? = null,
 ) = Family(id, guardian, null, personalIdentityNumber, delivery, email, null, externalReference, endedOn)
 
 val FAMILY_ID1: UUID = UUID.randomUUID()

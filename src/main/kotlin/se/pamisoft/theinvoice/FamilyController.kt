@@ -18,7 +18,6 @@ class FamilyController(private val familyRepository: FamilyRepository) {
     fun one(@PathVariable id: UUID): Family =
         familyRepository.findById(id) ?: throw ResponseStatusException(NOT_FOUND, "Unknown family $id.")
 
-    // TODO: check guardian id is not changed
     @PutMapping("/{id}")
     fun replace(@PathVariable id: UUID, @RequestBody family: Family) {
         if (id != family.id)
