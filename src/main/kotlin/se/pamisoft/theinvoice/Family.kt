@@ -20,7 +20,7 @@ import java.util.UUID
     "endedOn"
 )
 data class Family(
-    val id: UUID,
+    val id: UUID = UUID.randomUUID(),
     val guardian1: Guardian,
     val guardian2: Guardian?,
     val personalIdentityNumber: PersonalIdentityNumber,
