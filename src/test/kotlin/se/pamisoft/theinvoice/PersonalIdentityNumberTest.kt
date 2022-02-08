@@ -13,7 +13,7 @@ class PersonalIdentityNumberTest {
 
     @Test
     fun `Should format to long format`() {
-        val personalIdentityNumber = PersonalIdentityNumber("890201-3286")
+        val personalIdentityNumber = PersonalIdentityNumber("8902013286")
 
         assertThat(personalIdentityNumber.value).isEqualTo("19890201-3286")
     }
