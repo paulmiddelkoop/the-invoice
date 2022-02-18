@@ -152,7 +152,7 @@ function useSubmit() {
                     return data;
                 }, ...axios.defaults.transformRequest]
             })
-            .then(response => navigate(`/${data.id}`, {replace: true}))
+            .then(() => navigate(`/${data.id}`, {replace: true}))
             .catch(() => setPutError(true));
     }
     return {putError, onSubmit};
