@@ -23,5 +23,15 @@ class DatabasePopulator(private val familyRepository: FamilyRepository) : Applic
                 email = "john@gmail.com"
             )
         )
+        familyRepository.upsert(
+            Family(
+                guardian1 = Guardian(firstName = "Paul", lastName = "Middelkoop"),
+                guardian2 = null,
+                personalIdentityNumber = PersonalIdentityNumber("19890201-3286"),
+                delivery = E_INVOICE,
+                email = "paul@gmail.com"
+            )
+        )
+
     }
 }
