@@ -1,19 +1,37 @@
 import useSWR from "swr";
-import { Link } from "react-router-dom";
+import {Delivery} from "./FamilySchema";
+import {useNavigate} from "react-router-dom";
+import {NavigationButton} from "./NavigationButton";
+import {API_ENDPOINT} from "../App";
 
 export const Families = () => {
-    const {data} = useSWR("http://localhost:8080/api/v1/families");
+    const {data} = useSWR(`${API_ENDPOINT}/families`);
+    const navigate = useNavigate();
 
     return (
         <>
             <h1>Families</h1>
-            <ul>
+
+            <NavigationButton to="/families/create" className="mb-3" iconClassName="fa-solid fa-plus" label="New"/>
+
+            <table className="table table-hover">
+                <thead className="table-light">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Delivery</th>
+                    <th scope="col">External reference</th>
+                </tr>
+                </thead>
+                <tbody>
                 {data.map(family => (
-                    <li key={family.id}>
-                        <Link to={`/${family.id}`}>{family.name}</Link>
-                    </li>
+                    <tr onClick={() => navigate(`/families/${(family.id)}`)} key={family.id} >
+                        <td>{family.name}</td>
+                        <td>{Delivery[family.delivery].description}</td>
+                        <td>{family.externalReference}</td>
+                    </tr>
                 ))}
-            </ul>
+                </tbody>
+            </table>
         </>
     );
 }

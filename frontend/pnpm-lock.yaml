@@ -1,6 +1,7 @@
 lockfileVersion: 5.3
 
 specifiers:
+  '@fortawesome/fontawesome-free': ^6.0.0
   '@hookform/resolvers': ^2.8.8
   '@testing-library/jest-dom': ^5.16.2
   '@testing-library/react': ^12.1.3
@@ -19,6 +20,7 @@ specifiers:
   yup: ^0.32.11
 
 dependencies:
+  '@fortawesome/fontawesome-free': 6.0.0
   '@hookform/resolvers': 2.8.8_react-hook-form@7.27.0
   '@testing-library/jest-dom': 5.16.2
   '@testing-library/react': 12.1.3_88bc4fee344d9ebe6e1abd431fb36b31
@@ -1510,6 +1512,12 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: false
+
+  /@fortawesome/fontawesome-free/6.0.0:
+    resolution: {integrity: sha512-6LB4PYBST1Rx40klypw1SmSDArjFOcfBf2LeX9Zg5EKJT2eXiyiJq+CyBYKeXyK0sXS2FsCJWSPr/luyhuvh0Q==}
+    engines: {node: '>=6'}
+    requiresBuild: true
     dev: false
 
   /@hookform/resolvers/2.8.8_react-hook-form@7.27.0:
