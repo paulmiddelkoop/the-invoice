@@ -3,8 +3,8 @@ import {v4 as uuid} from "uuid";
 import Personnummer from "personnummer";
 
 export const Delivery = Object.freeze({
-    E_INVOICE:  Symbol("E-invoice"),
-    EMAIL:  Symbol("Email"),
+    E_INVOICE: Symbol("E-invoice"),
+    EMAIL: Symbol("Email"),
     POST: Symbol("Post"),
 });
 

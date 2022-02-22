@@ -1,0 +1,42 @@
+[
+  {
+    "id": "edecddba-ff79-44d7-9818-e95ae744a627",
+    "name": "John & Jane Doe",
+    "guardian1": {
+      "id": "cfb02e11-4a43-4a0c-be0d-941c54649bf2",
+      "firstName": "John",
+      "lastName": "Doe"
+    },
+    "guardian2": {
+      "id": "1a5aee24-8ecd-4c8b-90a8-ab4525718b20",
+      "firstName": "Jane",
+      "lastName": "Doe"
+    },
+    "personalIdentityNumber": "19890201-3286",
+    "delivery": "POST",
+    "email": "john@gmail.com",
+    "address": {
+      "address": "Norra Fjöle Björkhaga 1",
+      "zipCode": "671 95",
+      "city": "Klässbol"
+    },
+    "externalReference": "1",
+    "endedOn": null
+  },
+  {
+    "id": "2bc9b9d5-0283-4f3c-8c81-fc088ad613a5",
+    "name": "Paul Middelkoop",
+    "guardian1": {
+      "id": "40fabda9-9a5e-44f9-be0a-e5c6aa1773e8",
+      "firstName": "Paul",
+      "lastName": "Middelkoop"
+    },
+    "guardian2": null,
+    "personalIdentityNumber": "19770622-3232",
+    "delivery": "E_INVOICE",
+    "email": "paul@gmail.com",
+    "address": null,
+    "externalReference": "2",
+    "endedOn": null
+  }
+]

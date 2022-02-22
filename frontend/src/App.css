@@ -1,7 +1,7 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 @import "@fortawesome/fontawesome-free/css/all.min.css";
 
-/* Always display feedback if available, since we don't use Bootstrap, but React to add feedback */
+/* Always display feedback if available, since we don't use Bootstrap JS, but React to add feedback */
 .invalid-feedback {
     display: block;
 }

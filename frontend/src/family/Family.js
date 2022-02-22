@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import {useParams} from "react-router-dom";
-import {NavigationButton} from "./NavigationButton";
+import {NavigationButton} from "../NavigationButton";
 import {API_ENDPOINT} from "../App";
 import {Delivery} from "./FamilySchema";
 
