@@ -46,8 +46,7 @@ class FortnoxConfiguration {
         }
     }
 
-    @Bean
-    fun objectMapper(): ObjectMapper =
+    private fun objectMapper(): ObjectMapper =
         Jackson2ObjectMapperBuilder.json()
             .propertyNamingStrategy(UPPER_CAMEL_CASE)
             .deserializers(EmptyStringToNullDeserializer)
