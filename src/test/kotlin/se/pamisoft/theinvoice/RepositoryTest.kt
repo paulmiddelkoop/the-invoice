@@ -7,8 +7,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.stereotype.Repository
 import org.springframework.test.context.ActiveProfiles
 
-@JdbcTest
+@JdbcTest(includeFilters = [ComponentScan.Filter(Repository::class)])
 @AutoConfigureTestDatabase(replace = NONE)
 @ActiveProfiles("test")
-@ComponentScan(includeFilters = [ComponentScan.Filter(Repository::class)])
 annotation class RepositoryTest

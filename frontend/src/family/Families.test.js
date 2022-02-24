@@ -12,6 +12,7 @@ describe('render', () => {
                 .replyWithFile(200, __dirname + "/families.test.json");
 
             await render(<Families/>)
+
             const rows = screen.getAllByRole("row");
             expect(rows.length).toBe(3);
             expect(rows[1]).toHaveTextContent(/(John & Jane Doe)(Post)(1)/);
