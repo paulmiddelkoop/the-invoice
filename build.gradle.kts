@@ -2,7 +2,8 @@ import org.gradle.api.JavaVersion.VERSION_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.run.BootRun
 
-val jacocoVersion by extra("0.8.7")
+val jacocoVersion = "0.8.7"
+extra["netty.version"] = "4.1.74.Final"
 
 plugins {
 	id("org.springframework.boot") version "2.6.3"
@@ -38,6 +39,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-core")
 	implementation("dev.personnummer:personnummer:3.3.3")
 	implementation("io.github.microutils:kotlin-logging:2.1.21")
+	implementation("io.netty:netty-resolver-dns-native-macos:${properties["netty.version"]}:osx-aarch_64")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:${dependencyManagement.importedProperties["mockito.version"]}")
 	testImplementation("com.squareup.okhttp3:mockwebserver:4.9.3")
