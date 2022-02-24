@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.jdbc.JdbcTestUtils.countRowsInTableWhere
 import se.pamisoft.theinvoice.Delivery.POST
-import se.pamisoft.theinvoice.development.*
 import java.time.LocalDate.now
 
 @RepositoryTest

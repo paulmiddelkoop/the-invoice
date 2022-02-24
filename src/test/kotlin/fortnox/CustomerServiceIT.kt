@@ -42,7 +42,7 @@ class CustomerServiceIT(@Autowired private val customerService: CustomerService)
         val storedCustomer = runBlocking { customerService.createOrUpdate(customer) }
 
         assertThat(storedCustomer).isEqualTo(customer.copy(customerNumber = "98"))
-        with (mockWebServer.takeRequest()) {
+        with(mockWebServer.takeRequest()) {
             assertThat(method).isEqualTo(POST.name)
             assertThat(path).isEqualTo("/customers")
             assertThat(headers.names()).contains("Access-Token", "Client-Secret", CONTENT_TYPE)
@@ -62,12 +62,14 @@ class CustomerServiceIT(@Autowired private val customerService: CustomerService)
         @DynamicPropertySource
         @JvmStatic
         fun overrideFortnoxUri(registry: DynamicPropertyRegistry): Unit =
-            registry.add("fortnox.url") {mockWebServer.url("/").toString()}
+            registry.add("fortnox.url") { mockWebServer.url("/").toString() }
                 .also { println(mockWebServer.url("/").toString()) }
     }
 }
 
 fun MockWebServer.givenJsonResponse(fileName: String) =
-    enqueue(MockResponse()
-        .setBody(this::class.java.getResource(fileName)!!.readText())
-        .addHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE))
+    enqueue(
+        MockResponse()
+            .setBody(this::class.java.getResource(fileName)!!.readText())
+            .addHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+    )

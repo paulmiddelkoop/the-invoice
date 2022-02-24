@@ -1,6 +1,5 @@
-package se.pamisoft.theinvoice.development
+package se.pamisoft.theinvoice
 
-import se.pamisoft.theinvoice.*
 import se.pamisoft.theinvoice.Delivery.E_INVOICE
 import se.pamisoft.theinvoice.Delivery.POST
 import java.time.LocalDate
