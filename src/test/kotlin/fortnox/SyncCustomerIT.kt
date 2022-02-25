@@ -1,6 +1,5 @@
 package se.pamisoft.theinvoice.fortnox
 
-import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.assertj.core.api.Assertions.assertThat
@@ -15,33 +14,21 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
 import org.springframework.test.context.TestPropertySource
-import se.pamisoft.theinvoice.fortnox.DefaultDeliveryType.ELECTRONICINVOICE
+import se.pamisoft.theinvoice.family
 
 
 @SpringBootTest
 @ActiveProfiles("test")
 @TestPropertySource(properties = ["fortnox.uri"])
-class CustomerServiceIT(@Autowired private val customerService: CustomerService) {
+class SyncCustomerIT(@Autowired private val syncCustomer: SyncCustomer) {
     @Test
     fun `Should create customer`() {
-        mockWebServer.givenJsonResponse("/Customer.json")
+        mockWebServer.givenJsonResponse("/customer.json")
+        val family = family(customerNumber = null)
 
-        val customer = Customer(
-            customerNumber = BLANK_VALUE,
-            name = "Test",
-            organisationNumber = "19770622-3232",
-            defaultDeliveryTypes = DefaultDeliveryTypes(ELECTRONICINVOICE),
-            address1 = null,
-            zipCode = null,
-            city = null,
-            email = null,
-            emailInvoice = null,
-            active = true
-        )
+        val syncedFamily = syncCustomer(family)
 
-        val storedCustomer = runBlocking { customerService.createOrUpdate(customer) }
-
-        assertThat(storedCustomer).isEqualTo(customer.copy(customerNumber = "98"))
+        assertThat(syncedFamily).isEqualTo(family.copy(customerNumber = "98"))
         with(mockWebServer.takeRequest()) {
             assertThat(method).isEqualTo(POST.name)
             assertThat(path).isEqualTo("/customers")

@@ -20,7 +20,8 @@ class DatabasePopulator(private val familyRepository: FamilyRepository) : Applic
                 guardian2 = Guardian(firstName = "Jane", lastName = "Doe"),
                 personalIdentityNumber = PersonalIdentityNumber("19890201-3286"),
                 delivery = E_INVOICE,
-                email = "john@gmail.com"
+                email = "john@gmail.com",
+                customerNumber = "80"
             )
         )
         familyRepository.upsert(
@@ -29,7 +30,8 @@ class DatabasePopulator(private val familyRepository: FamilyRepository) : Applic
                 guardian2 = null,
                 personalIdentityNumber = PersonalIdentityNumber("19890201-3286"),
                 delivery = E_INVOICE,
-                email = "paul@gmail.com"
+                email = "paul@gmail.com",
+                customerNumber = "81"
             )
         )
 

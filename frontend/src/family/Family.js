@@ -26,6 +26,9 @@ export const Family = () => {
                 <dt className="col-sm-3">Delivery</dt>
                 <dd className="col-sm-9">{Delivery[data.delivery].description}</dd>
 
+                <dt className="col-sm-3">Customer number</dt>
+                <dd className="col-sm-9">{data.customerNumber}</dd>
+
                 {data.address &&
                     <>
                         <dt className="col-sm-3">Address</dt>

@@ -6,7 +6,7 @@ create table family (
     guardian2_id uuid references guardian(id),
     delivery delivery not null,
     personal_identity_number text not null,
-    external_reference text,
+    customer_number text not null,
     email text not null,
     ended_on date,
     address text,

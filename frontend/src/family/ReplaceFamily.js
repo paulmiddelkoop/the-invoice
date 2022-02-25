@@ -151,6 +151,7 @@ function useSubmit(navigate) {
                     if (data.singleParent) delete data.guardian2
                     if (data.delivery !== "POST") delete data.address
                     delete data.singleParent
+                    delete data.name
                     return data;
                 }, ...axios.defaults.transformRequest]
             })

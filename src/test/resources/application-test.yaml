@@ -6,4 +6,3 @@ spring.datasource:
 fortnox:
   accessToken: x
   clientSecret: y
-  url: https://api.fortnox.se/3

@@ -25,7 +25,7 @@ class FamilyRepositoryIT(
     @Test
     fun `Should insert with all fields`() {
         val family =
-            family(id = FAMILY_ID1, delivery = POST, address = address(), externalReference = "C1", endedOn = now())
+            family(id = FAMILY_ID1, delivery = POST, address = address(), endedOn = now())
 
         repository.upsert(family)
 

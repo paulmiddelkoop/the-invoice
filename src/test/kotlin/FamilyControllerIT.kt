@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.ResultActionsDsl
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.put
 import se.pamisoft.theinvoice.Delivery.POST
+import se.pamisoft.theinvoice.fortnox.SyncCustomer
 import java.util.UUID.randomUUID
 
 @WebMvcTest(FamilyController::class)
@@ -21,9 +22,14 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
     @MockBean
     private lateinit var familyRepository: FamilyRepository
 
+    @MockBean
+    private lateinit var syncCustomer: SyncCustomer
+
     @Test
     fun `Should replace`() {
         val family = family(id = FAMILY_ID1)
+        val familyWithExternalReference = family.copy(customerNumber = "89")
+        given(syncCustomer(family)).willReturn(familyWithExternalReference)
 
         val result = mvc.put("/api/v1/families/$FAMILY_ID1") {
             contentType = APPLICATION_JSON
@@ -31,7 +37,8 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
         }
 
         result.andExpect { status { isOk() } }
-        then(familyRepository).should().upsert(family)
+        then(syncCustomer).should().invoke(family)
+        then(familyRepository).should().upsert(familyWithExternalReference)
     }
 
     @Test
@@ -73,7 +80,7 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
               "delivery": "E_INVOICE",
               "email": "john@gmail.com",
               "address": null,
-              "externalReference": null,
+              "customerNumber": "80",
               "endedOn": null
             }"""
         )
@@ -85,7 +92,6 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
             family(
                 id = FAMILY_ID1,
                 delivery = POST,
-                externalReference = "E1",
                 endedOn = NOW
             )
         )
@@ -115,7 +121,7 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
                 "zipCode": "10014",
                 "city": "New York"
               },
-              "externalReference": E1,
+              "customerNumber": "80",
               "endedOn": $NOW
             }"""
         )
@@ -146,7 +152,7 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
                 "delivery": "E_INVOICE",
                 "email": "john@gmail.com",
                 "address": null,
-                "externalReference": null,
+                "customerNumber": "80",
                 "endedOn": null
               },
               {
@@ -162,7 +168,7 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
                 "delivery": "E_INVOICE",
                 "email": "john@gmail.com",
                 "address": null,
-                "externalReference": null,
+                "customerNumber": "80",
                 "endedOn": null
               }
             ]

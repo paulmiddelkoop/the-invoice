@@ -25,9 +25,9 @@ fun family(
     delivery: Delivery = E_INVOICE,
     email: String = "john@gmail.com",
     address: Address? = address().takeIf { delivery == POST },
-    externalReference: String? = null,
+    customerNumber: String? = CUSTOMER_NUMBER,
     endedOn: LocalDate? = null
-) = Family(id, guardian1, guardian2 , personalIdentityNumber, delivery, email, address, externalReference, endedOn)
+) = Family(id, guardian1, guardian2 , personalIdentityNumber, delivery, email, address, customerNumber, endedOn)
 
 fun singleParentFamily(
     id: UUID = FAMILY_ID2,
@@ -35,13 +35,14 @@ fun singleParentFamily(
     personalIdentityNumber: PersonalIdentityNumber = PERSONAL_IDENTITY_NUMBER,
     delivery: Delivery = E_INVOICE,
     email: String = "john@gmail.com",
-    externalReference: String? = null,
+    customerNumber: String? = CUSTOMER_NUMBER,
     endedOn: LocalDate? = null,
-) = Family(id, guardian, null, personalIdentityNumber, delivery, email, null, externalReference, endedOn)
+) = Family(id, guardian, null, personalIdentityNumber, delivery, email, null, customerNumber, endedOn)
 
 val FAMILY_ID1: UUID = UUID.randomUUID()
 val FAMILY_ID2: UUID = UUID.randomUUID()
 val GUARDIAN_ID1: UUID = UUID.randomUUID()
 val GUARDIAN_ID2: UUID = UUID.randomUUID()
 val PERSONAL_IDENTITY_NUMBER = PersonalIdentityNumber("19890201-3286")
+val CUSTOMER_NUMBER = "80"
 val NOW: LocalDate = LocalDate.now()

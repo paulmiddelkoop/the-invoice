@@ -30,7 +30,7 @@ class FamilyRepository(private val db: NamedParameterJdbcTemplate, private val g
             |    address, 
             |    zip_code, 
             |    city, 
-            |    external_reference, 
+            |    customer_number, 
             |    ended_on)
             |values (
             |    :id, 
@@ -42,7 +42,7 @@ class FamilyRepository(private val db: NamedParameterJdbcTemplate, private val g
             |    :address, 
             |    :zip_code, 
             |    :city, 
-            |    :external_reference, 
+            |    :customer_number, 
             |    :ended_on)
             |on conflict (id) do update
             |set guardian2_id = :guardian2_id,
@@ -52,7 +52,7 @@ class FamilyRepository(private val db: NamedParameterJdbcTemplate, private val g
             |    address = :address,
             |    zip_code =:zip_code,
             |    city = :city,
-            |    external_reference = :external_reference, 
+            |    customer_number = :customer_number, 
             |    ended_on = :ended_on""".trimMargin(),
             family.toMap()
         )
@@ -79,7 +79,7 @@ private fun Family.toMap() = mapOf(
     "address" to address?.address,
     "zip_code" to address?.zipCode,
     "city" to address?.city,
-    "external_reference" to externalReference,
+    "customer_number" to customerNumber,
     "ended_on" to endedOn
 )
 
@@ -93,7 +93,7 @@ private fun ResultSet.getFamily(): Family {
         delivery = delivery,
         email = getString("email"),
         address = if (delivery == POST) getAddress() else null,
-        externalReference = getString("external_reference"),
+        customerNumber = getString("customer_number"),
         endedOn = getObject("ended_on", LocalDate::class.java)
     )
 }

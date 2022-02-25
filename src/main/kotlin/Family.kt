@@ -16,7 +16,7 @@ import java.util.UUID
     "delivery",
     "email",
     "address",
-    "externalReference",
+    "customerNumber",
     "endedOn"
 )
 data class Family(
@@ -27,7 +27,7 @@ data class Family(
     val delivery: Delivery,
     val email: String,
     val address: Address? = null,
-    val externalReference: String? = null,
+    val customerNumber: String? = null,
     val endedOn: LocalDate? = null
 ) {
     @JsonIgnore
