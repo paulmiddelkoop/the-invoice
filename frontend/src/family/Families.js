@@ -1,40 +1,39 @@
 import useSWR from "swr";
-import {Delivery} from "./FamilySchema";
-import {useNavigate} from "react-router-dom";
-import {NavigationButton} from "../NavigationButton";
-import {API_ENDPOINT} from "../App";
+import { Delivery } from "./Delivery";
+import { useNavigate } from "react-router-dom";
+import { NavigationButton } from "../NavigationButton";
+import { API_ENDPOINT } from "../App";
 import React from "react";
+import { Alert, Table } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
 export const Families = () => {
-    const {data} = useSWR(`${API_ENDPOINT}/families`);
-    const navigate = useNavigate();
+  const { data } = useSWR(`${API_ENDPOINT}/families`);
+  const navigate = useNavigate();
+  const columns = [
+    { title: "Name", dataIndex: "name", key: "name" },
+    { title: "Delivery", dataIndex: "delivery", key: "delivery", render: (text) => Delivery[text].description },
+    { title: "Customer number", dataIndex: "customerNumber", key: "customerNumber" }
+  ];
 
-    return (
-        <>
-            <h1>Families</h1>
+  return (
+    <>
+      <h1>Families</h1>
 
-            <NavigationButton to="/families/create" className="mb-3" iconClassName="fa-solid fa-plus" label="New"/>
+      <NavigationButton to="/families/create" tooltip="New family" icon={<PlusOutlined />} />
 
-            {!data.length ? <div className="alert alert-info" role="alert">No families found.</div> :
-                <table className="table table-hover">
-                    <thead className="table-light">
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Delivery</th>
-                        <th scope="col">External reference</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {data.map(family => (
-                        <tr onClick={() => navigate(`/families/${(family.id)}`)} key={family.id}>
-                            <td>{family.name}</td>
-                            <td>{Delivery[family.delivery].description}</td>
-                            <td>{family.externalReference}</td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-            }
-        </>
-    );
-}
+      {!data.length ? (
+        <Alert message="No families found." type="error" />
+      ) : (
+        <Table
+          columns={columns}
+          dataSource={data}
+          rowKey={"id"}
+          onRow={(row) => ({
+            onClick: () => navigate(`/families/${row.id}`)
+          })}
+        />
+      )}
+    </>
+  );
+};

@@ -1,11 +1,14 @@
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Button, Tooltip } from "antd";
 
 export const NavigationButton = (props) => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    return (
-        <button type="button" onClick={() => navigate(props.to)} className={`btn btn-primary ${props.className}`}>
-            <i className={`${props.iconClassName} fa-l`}/> {props.label}
-        </button>
-    )
-}
+  return (
+    <Tooltip title={props.tooltip}>
+      <Button type="primary" shape="circle" size="large" icon={props.icon} onClick={() => navigate(props.to)}>
+        {props.label}
+      </Button>
+    </Tooltip>
+  );
+};

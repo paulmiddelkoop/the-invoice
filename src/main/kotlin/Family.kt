@@ -28,10 +28,12 @@ data class Family(
     val email: String,
     val address: Address? = null,
     val customerNumber: String? = null,
-    val endedOn: LocalDate? = null
+    val endedOn: LocalDate? = null,
+    val incomes: List<Income> = emptyList()
 ) {
     @JsonIgnore
     val guardians = listOfNotNull(guardian1, guardian2)
+    val singleParent = guardian2 == null
 
     val name = guardian2?.let {
         "${if (guardian1.lastName == guardian2.lastName) guardian1.firstName else guardian1.name} & ${guardian2.name}"

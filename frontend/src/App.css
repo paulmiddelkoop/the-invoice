@@ -1,7 +1,29 @@
-@import "bootstrap/dist/css/bootstrap.min.css";
-@import "@fortawesome/fontawesome-free/css/all.min.css";
+@import "~antd/dist/antd.css";
 
-/* Always display feedback if available, since we don't use Bootstrap JS, but React to add feedback */
-.invalid-feedback {
-    display: block;
+.content {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.label {
+  font-weight: bold;
+}
+
+.header a {
+  color: white;
+}
+
+.header img {
+  height: 32px;
+  margin-right: 12px;
+}
+
+.ant-form-item {
+  margin-bottom: 16px;
+}
+
+tbody tr {
+  cursor: pointer;
 }

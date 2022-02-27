@@ -81,7 +81,9 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
               "email": "john@gmail.com",
               "address": null,
               "customerNumber": "80",
-              "endedOn": null
+              "endedOn": null,
+              "incomes": [],
+              "singleParent": true
             }"""
         )
     }
@@ -122,7 +124,9 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
                 "city": "New York"
               },
               "customerNumber": "80",
-              "endedOn": $NOW
+              "endedOn": $NOW,
+              "incomes": [],
+              "singleParent": false
             }"""
         )
     }
@@ -153,7 +157,9 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
                 "email": "john@gmail.com",
                 "address": null,
                 "customerNumber": "80",
-                "endedOn": null
+                "endedOn": null,
+                "incomes": [],
+                "singleParent": false
               },
               {
                 "id": $FAMILY_ID2,
@@ -169,7 +175,9 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
                 "email": "john@gmail.com",
                 "address": null,
                 "customerNumber": "80",
-                "endedOn": null
+                "endedOn": null,
+                "incomes": [],
+                "singleParent": true
               }
             ]
             """

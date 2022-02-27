@@ -4,11 +4,9 @@ import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.springframework.context.annotation.Profile
 import org.springframework.stereotype.Component
+import se.pamisoft.theinvoice.*
 import se.pamisoft.theinvoice.Delivery.E_INVOICE
-import se.pamisoft.theinvoice.Family
-import se.pamisoft.theinvoice.FamilyRepository
-import se.pamisoft.theinvoice.Guardian
-import se.pamisoft.theinvoice.PersonalIdentityNumber
+import java.time.LocalDate
 
 @Component
 @Profile("dev")
@@ -21,7 +19,11 @@ class DatabasePopulator(private val familyRepository: FamilyRepository) : Applic
                 personalIdentityNumber = PersonalIdentityNumber("19890201-3286"),
                 delivery = E_INVOICE,
                 email = "john@gmail.com",
-                customerNumber = "80"
+                customerNumber = "80",
+                incomes = listOf(
+                    Income(max = true, amount = null, changedOn = LocalDate.now()),
+                    Income(max = false, amount = 40_000, changedOn = LocalDate.now().minusMonths(10))
+                )
             )
         )
         familyRepository.upsert(

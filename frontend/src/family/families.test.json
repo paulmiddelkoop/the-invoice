@@ -20,7 +20,7 @@
       "zipCode": "671 95",
       "city": "Klässbol"
     },
-    "externalReference": "1",
+    "customerNumber": "1",
     "endedOn": null
   },
   {
@@ -36,7 +36,7 @@
     "delivery": "E_INVOICE",
     "email": "paul@gmail.com",
     "address": null,
-    "externalReference": "2",
+    "customerNumber": "2",
     "endedOn": null
   }
 ]

@@ -4,11 +4,14 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
 import se.pamisoft.theinvoice.Delivery.POST
 import java.sql.ResultSet
-import java.time.LocalDate
 import java.util.UUID
 
 @Repository
-class FamilyRepository(private val db: NamedParameterJdbcTemplate, private val guardianRepository: GuardianRepository) {
+class FamilyRepository(
+    private val db: NamedParameterJdbcTemplate,
+    private val guardianRepository: GuardianRepository,
+    private val incomeRepository: IncomeRepository
+) {
     fun findAll(): Iterable<Family> =
         db.query(QUERY) { rs, _ -> rs.getFamily() }
 
@@ -19,7 +22,8 @@ class FamilyRepository(private val db: NamedParameterJdbcTemplate, private val g
     fun upsert(family: Family) {
         guardianRepository.upsert(family.guardians)
 
-        db.update("""
+        db.update(
+            """
             |insert into family (
             |    id, 
             |    guardian1_id, 
@@ -58,6 +62,22 @@ class FamilyRepository(private val db: NamedParameterJdbcTemplate, private val g
         )
 
         if (family.guardian2 == null) guardianRepository.deleteOrphans()
+        incomeRepository.upsert(family)
+    }
+
+    private fun ResultSet.getFamily(): Family {
+        val delivery = Delivery.of(getString("delivery"))
+        return Family(
+            id = getRequiredUuid("id"),
+            guardian1 = getGuardian(1),
+            guardian2 = getUuid("guardian2_id")?.let { getGuardian(2) },
+            personalIdentityNumber = PersonalIdentityNumber(getString("personal_identity_number")),
+            delivery = delivery,
+            email = getString("email"),
+            address = if (delivery == POST) getAddress() else null,
+            customerNumber = getString("customer_number"),
+            endedOn = getLocalDate("ended_on")
+        ).let { it.copy(incomes = incomeRepository.findFor(it)) }
     }
 }
 
@@ -82,21 +102,6 @@ private fun Family.toMap() = mapOf(
     "customer_number" to customerNumber,
     "ended_on" to endedOn
 )
-
-private fun ResultSet.getFamily(): Family {
-    val delivery = Delivery.of(getString("delivery"))
-    return Family(
-        id = getRequiredUuid("id"),
-        guardian1 = getGuardian(1),
-        guardian2 = getUuid("guardian2_id")?.let { getGuardian(2) },
-        personalIdentityNumber = PersonalIdentityNumber(getString("personal_identity_number")),
-        delivery = delivery,
-        email = getString("email"),
-        address = if (delivery == POST) getAddress() else null,
-        customerNumber = getString("customer_number"),
-        endedOn = getObject("ended_on", LocalDate::class.java)
-    )
-}
 
 private fun ResultSet.getGuardian(index: Int) =
     Guardian(
