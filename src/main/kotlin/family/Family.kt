@@ -1,9 +1,9 @@
-package se.pamisoft.theinvoice
+package se.pamisoft.theinvoice.family
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import dev.personnummer.Personnummer
-import se.pamisoft.theinvoice.Delivery.POST
+import se.pamisoft.theinvoice.family.Delivery.POST
 import java.time.LocalDate
 import java.util.UUID
 
@@ -28,8 +28,7 @@ data class Family(
     val email: String,
     val address: Address? = null,
     val customerNumber: String? = null,
-    val endedOn: LocalDate? = null,
-    val incomes: List<Income> = emptyList()
+    val endedOn: LocalDate? = null
 ) {
     @JsonIgnore
     val guardians = listOfNotNull(guardian1, guardian2)

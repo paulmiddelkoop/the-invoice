@@ -1,12 +1,14 @@
-package se.pamisoft.theinvoice
+package se.pamisoft.theinvoice.family
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.test.jdbc.JdbcTestUtils.countRowsInTableWhere
-import se.pamisoft.theinvoice.Delivery.POST
+import se.pamisoft.theinvoice.*
+import se.pamisoft.theinvoice.family.Delivery.POST
 import java.time.LocalDate.now
+import java.util.UUID.randomUUID
 
 @RepositoryTest
 class FamilyRepositoryIT(
@@ -58,6 +60,22 @@ class FamilyRepositoryIT(
         val families = repository.findAll()
 
         assertThat(families).containsExactlyInAnyOrder(family1, family2)
+    }
+
+    @Test
+    fun `Should return true if exists`() {
+        givenFamily(family(id = FAMILY_ID1))
+
+        val exists = repository.exist(FAMILY_ID1)
+
+        assertThat(exists).isTrue
+    }
+
+    @Test
+    fun `Should return false if not exists`() {
+        val exists = repository.exist(randomUUID())
+
+        assertThat(exists).isFalse
     }
 
     private fun givenFamily(family: Family) =

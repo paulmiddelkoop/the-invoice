@@ -7,8 +7,8 @@ import org.springframework.http.HttpMethod.PUT
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
-import se.pamisoft.theinvoice.Delivery
-import se.pamisoft.theinvoice.Family
+import se.pamisoft.theinvoice.family.Delivery
+import se.pamisoft.theinvoice.family.Family
 import se.pamisoft.theinvoice.fortnox.CustomerType.PRIVATE
 
 private val logger = logger {}

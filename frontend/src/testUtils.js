@@ -5,20 +5,18 @@ import { MemoryRouter } from "react-router-dom";
 import { render, screen, waitForElementToBeRemoved } from "@testing-library/react";
 import nock from "nock";
 
-const AllTheProviders = ({ children }) => {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <SWRConfig
-        value={{ suspense: true, fetcher: (url) => axios.get(url).then((res) => res.data), dedupingInterval: 0 }}
-      >
-        <MemoryRouter>
-          {children}
-          <ClearSwrCache />
-        </MemoryRouter>
-      </SWRConfig>
-    </Suspense>
-  );
-};
+const AllTheProviders = ({ children }) => (
+  <Suspense fallback={<div>Loading...</div>}>
+    <SWRConfig
+      value={{ suspense: true, fetcher: (url) => axios.get(url).then((res) => res.data), dedupingInterval: 0 }}
+    >
+      <MemoryRouter>
+        {children}
+        <ClearSwrCache />
+      </MemoryRouter>
+    </SWRConfig>
+  </Suspense>
+);
 
 // Needed because SWR cache is not cleared between test with when using the recommended approach of a provider.
 const ClearSwrCache = () => {

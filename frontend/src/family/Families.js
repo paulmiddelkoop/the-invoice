@@ -1,14 +1,13 @@
 import useSWR from "swr";
 import { Delivery } from "./Delivery";
 import { useNavigate } from "react-router-dom";
-import { NavigationButton } from "../NavigationButton";
-import { API_ENDPOINT } from "../App";
+import { NavigationButton } from "../util/NavigationButton";
 import React from "react";
 import { Alert, Table } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 
 export const Families = () => {
-  const { data } = useSWR(`${API_ENDPOINT}/families`);
+  const { data } = useSWR("/families");
   const navigate = useNavigate();
   const columns = [
     { title: "Name", dataIndex: "name", key: "name" },

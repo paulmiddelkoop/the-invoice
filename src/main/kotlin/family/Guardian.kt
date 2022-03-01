@@ -1,4 +1,4 @@
-package se.pamisoft.theinvoice
+package se.pamisoft.theinvoice.family
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import java.util.UUID

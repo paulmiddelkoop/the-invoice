@@ -1,20 +1,15 @@
 import useSWR from "swr";
 import { useParams } from "react-router-dom";
-import { NavigationButton } from "../NavigationButton";
-import { API_ENDPOINT } from "../App";
+import { NavigationButton } from "../util/NavigationButton";
 import { Delivery } from "./Delivery";
-import { Button, Col, Collapse, List, Row, Tooltip } from "antd";
-import { EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { Col, Row } from "antd";
+import { EditOutlined } from "@ant-design/icons";
+import React from "react";
+import { IncomeList } from "./Income";
 
 export const Family = () => {
-  const formatter = new Intl.NumberFormat("se-SE", {
-    style: "currency",
-    currency: "SEK"
-  });
-
   const { id } = useParams();
-  const { data } = useSWR(`${API_ENDPOINT}/families/${id}`);
-  const { Panel } = Collapse;
+  const { data } = useSWR(`/families/${id}`);
 
   return (
     <>
@@ -51,26 +46,7 @@ export const Family = () => {
         <Value>{data.customerNumber}</Value>
       </Row>
 
-      <Collapse>
-        <Panel header="Income" key="income">
-          <Button type="primary" shape="circle" icon={<PlusOutlined />} />
-          <List
-            itemLayout="horizontal"
-            dataSource={data.incomes}
-            renderItem={(item) => (
-              <List.Item>
-                <List.Item.Meta
-                  title={item.max ? "Max income" : formatter.format(item.amount)}
-                  description={`Since ${item.changedOn}`}
-                />
-                <Tooltip title="Edit">
-                  <Button type="primary" shape="circle" icon={<EditOutlined />} />
-                </Tooltip>
-              </List.Item>
-            )}
-          />
-        </Panel>
-      </Collapse>
+      <IncomeList familyId={id} />
     </>
   );
 };

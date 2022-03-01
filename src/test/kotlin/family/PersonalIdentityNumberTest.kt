@@ -1,4 +1,4 @@
-package se.pamisoft.theinvoice
+package se.pamisoft.theinvoice.family
 
 import dev.personnummer.PersonnummerException
 import org.assertj.core.api.Assertions.assertThat

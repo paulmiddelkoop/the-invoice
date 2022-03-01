@@ -3,7 +3,7 @@ create table income (
     family_id uuid not null references family(id),
     max boolean not null,
     amount int,
-    changed_on date not null
+    starts_on date not null
 
     constraint income_check check (max or (amount is not null and amount > 0))
 );

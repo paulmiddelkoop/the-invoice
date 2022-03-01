@@ -1,4 +1,4 @@
-package se.pamisoft.theinvoice
+package se.pamisoft.theinvoice.family
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository

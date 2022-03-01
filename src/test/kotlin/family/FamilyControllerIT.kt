@@ -1,4 +1,4 @@
-package se.pamisoft.theinvoice
+package se.pamisoft.theinvoice.family
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Test
@@ -9,10 +9,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.ResultActionsDsl
 import org.springframework.test.web.servlet.get
 import org.springframework.test.web.servlet.put
-import se.pamisoft.theinvoice.Delivery.POST
+import se.pamisoft.theinvoice.*
+import se.pamisoft.theinvoice.family.Delivery.POST
 import se.pamisoft.theinvoice.fortnox.SyncCustomer
 import java.util.UUID.randomUUID
 
@@ -53,10 +53,9 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
 
     @Test
     fun `Should return 404 when requesting unknown family`() {
-        given(familyRepository.findById(FAMILY_ID1)).willReturn(null)
+        val result = mvc.get("/api/v1/families/${randomUUID()}")
 
-        mvc.get("/api/v1/families/${randomUUID()}")
-            .andExpect { status { isNotFound() } }
+        result.andExpect { status { isNotFound() } }
     }
 
     @Test
@@ -82,7 +81,6 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
               "address": null,
               "customerNumber": "80",
               "endedOn": null,
-              "incomes": [],
               "singleParent": true
             }"""
         )
@@ -125,7 +123,6 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
               },
               "customerNumber": "80",
               "endedOn": $NOW,
-              "incomes": [],
               "singleParent": false
             }"""
         )
@@ -133,11 +130,12 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
 
     @Test
     fun `Should return families when requesting all families`() {
-        given(familyRepository.findAll()).willReturn(listOf(family(id = FAMILY_ID1), singleParentFamily(id = FAMILY_ID2)))
+        given(familyRepository.findAll()).willReturn(listOf(family(id = FAMILY_ID1)))
 
         val result = mvc.get("/api/v1/families")
 
-        result.thenJsonResultIs("""
+        result.thenJsonResultIs(
+            """
             [
               {
                 "id": $FAMILY_ID1,
@@ -158,39 +156,10 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
                 "address": null,
                 "customerNumber": "80",
                 "endedOn": null,
-                "incomes": [],
                 "singleParent": false
-              },
-              {
-                "id": $FAMILY_ID2,
-                "name": "John Doe",
-                "guardian1": {
-                  "id": $GUARDIAN_ID1,
-                  "firstName": "John",
-                  "lastName": "Doe"
-                },
-                "guardian2": null,
-                "personalIdentityNumber": "19890201-3286",
-                "delivery": "E_INVOICE",
-                "email": "john@gmail.com",
-                "address": null,
-                "customerNumber": "80",
-                "endedOn": null,
-                "incomes": [],
-                "singleParent": true
               }
             ]
             """
         )
-    }
-}
-
-private fun ResultActionsDsl.thenJsonResultIs(jsonContent: String) {
-    andExpect {
-        status { isOk() }
-        content {
-            contentType(APPLICATION_JSON)
-            json(jsonContent, strict = true)
-        }
     }
 }

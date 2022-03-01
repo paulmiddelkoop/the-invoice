@@ -1,12 +1,14 @@
 package se.pamisoft.theinvoice
 
-import se.pamisoft.theinvoice.Delivery.E_INVOICE
-import se.pamisoft.theinvoice.Delivery.POST
+import se.pamisoft.theinvoice.family.*
+import se.pamisoft.theinvoice.family.Delivery.E_INVOICE
+import se.pamisoft.theinvoice.family.Delivery.POST
+import se.pamisoft.theinvoice.family.income.Income
 import java.time.LocalDate
 import java.util.UUID
 
 fun guardian(
-    id: UUID= GUARDIAN_ID1,
+    id: UUID = GUARDIAN_ID1,
     firstName: String = "John",
     lastName: String = "Doe",
 ) = Guardian(id, firstName, lastName)
@@ -27,7 +29,7 @@ fun family(
     address: Address? = address().takeIf { delivery == POST },
     customerNumber: String? = CUSTOMER_NUMBER,
     endedOn: LocalDate? = null
-) = Family(id, guardian1, guardian2 , personalIdentityNumber, delivery, email, address, customerNumber, endedOn)
+) = Family(id, guardian1, guardian2, personalIdentityNumber, delivery, email, address, customerNumber, endedOn)
 
 fun singleParentFamily(
     id: UUID = FAMILY_ID2,
@@ -39,10 +41,22 @@ fun singleParentFamily(
     endedOn: LocalDate? = null,
 ) = Family(id, guardian, null, personalIdentityNumber, delivery, email, null, customerNumber, endedOn)
 
+fun maxIncome(
+    id: UUID = INCOME_ID,
+    changedOn: LocalDate = NOW
+) = Income(id, true, null, changedOn)
+
+fun income(
+    amount: Int = 40_0000,
+    id: UUID = INCOME_ID,
+    changedOn: LocalDate = NOW
+) = Income(id, false, amount, changedOn)
+
 val FAMILY_ID1: UUID = UUID.randomUUID()
 val FAMILY_ID2: UUID = UUID.randomUUID()
 val GUARDIAN_ID1: UUID = UUID.randomUUID()
 val GUARDIAN_ID2: UUID = UUID.randomUUID()
+val INCOME_ID: UUID = UUID.randomUUID()
 val PERSONAL_IDENTITY_NUMBER = PersonalIdentityNumber("19890201-3286")
-val CUSTOMER_NUMBER = "80"
+const val CUSTOMER_NUMBER = "80"
 val NOW: LocalDate = LocalDate.now()

@@ -1,4 +1,4 @@
-package se.pamisoft.theinvoice
+package se.pamisoft.theinvoice.family
 
 import org.springframework.http.HttpStatus.BAD_REQUEST
 import org.springframework.http.HttpStatus.NOT_FOUND

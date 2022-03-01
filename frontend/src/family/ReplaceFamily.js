@@ -1,19 +1,24 @@
-import React, { useState } from "react";
+import React from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-import axios from "axios";
 import useSWR from "swr";
-import { API_ENDPOINT } from "../App";
 import { Alert, Button, Checkbox, Form, Input, Radio, Space } from "antd";
 import Personnummer from "personnummer";
 import { Delivery } from "./Delivery";
 import { v4 as uuid } from "uuid";
+import { ConditionalFormItem } from "../util/ConditionalFormItem";
+import { HiddenField, required } from "../util/FormUtils";
+import useAxios from "axios-hooks";
 
 export const ReplaceFamily = () => {
   const [form] = Form.useForm();
   const initialValues = useInitialValues();
   const navigate = useNavigate();
-  const { putError, onSubmit } = useSubmit(initialValues, navigate);
+
+  const [{ error: putError }, executePut] = useAxios({ method: "put" }, { manual: true });
+  const onSubmit = async (values) => {
+    await executePut({ url: `/families/${values.id}`, data: values });
+    navigate(`/families/${values.id}`);
+  };
 
   return (
     <>
@@ -30,7 +35,6 @@ export const ReplaceFamily = () => {
         initialValues={initialValues}
       >
         <HiddenField name="id" />
-        <HiddenField name="incomes" />
 
         <fieldset>
           <legend>Guardian 1</legend>
@@ -58,34 +62,30 @@ export const ReplaceFamily = () => {
           </Form.Item>
         </fieldset>
 
-        <Form.Item noStyle shouldUpdate={(oldValues, newValues) => oldValues.singleParent !== newValues.singleParent}>
-          {({ getFieldValue }) =>
-            !getFieldValue("singleParent") && (
-              <fieldset>
-                <legend>Guardian 2</legend>
-                <HiddenField name={["guardian2", "id"]} />
-                <Form.Item noStyle>
-                  <Form.Item
-                    name={["guardian2", "firstName"]}
-                    label="First name"
-                    style={{ display: "inline-block", width: "40%" }}
-                    {...required}
-                  >
-                    <Input />
-                  </Form.Item>
-                  <Form.Item
-                    name={["guardian2", "lastName"]}
-                    label="Last name"
-                    style={{ display: "inline-block", width: "60%", paddingLeft: "10px" }}
-                    {...required}
-                  >
-                    <Input />
-                  </Form.Item>
-                </Form.Item>
-              </fieldset>
-            )
-          }
-        </Form.Item>
+        <ConditionalFormItem name="singleParent" visible={(singleParent) => !singleParent}>
+          <fieldset>
+            <legend>Guardian 2</legend>
+            <HiddenField name={["guardian2", "id"]} />
+            <Form.Item noStyle>
+              <Form.Item
+                name={["guardian2", "firstName"]}
+                label="First name"
+                style={{ display: "inline-block", width: "40%" }}
+                {...required}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name={["guardian2", "lastName"]}
+                label="Last name"
+                style={{ display: "inline-block", width: "60%", paddingLeft: "10px" }}
+                {...required}
+              >
+                <Input />
+              </Form.Item>
+            </Form.Item>
+          </fieldset>
+        </ConditionalFormItem>
 
         <fieldset>
           <legend>Invoice</legend>
@@ -125,36 +125,32 @@ export const ReplaceFamily = () => {
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item noStyle shouldUpdate={(oldValues, newValues) => oldValues.delivery !== newValues.delivery}>
-            {({ getFieldValue }) =>
-              getFieldValue("delivery") === "POST" && (
-                <>
-                  <Form.Item name={["address", "address"]} label="Address" {...required}>
-                    <Input />
-                  </Form.Item>
+          <ConditionalFormItem name="delivery" visible={(delivery) => delivery === "POST"}>
+            <>
+              <Form.Item name={["address", "address"]} label="Address" {...required}>
+                <Input />
+              </Form.Item>
 
-                  <Form.Item noStyle>
-                    <Form.Item
-                      name={["address", "zipCode"]}
-                      label="Zipcode"
-                      style={{ display: "inline-block", width: "30%" }}
-                      {...required}
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      name={["address", "city"]}
-                      label="City"
-                      style={{ display: "inline-block", width: "70%", paddingLeft: "12px" }}
-                      {...required}
-                    >
-                      <Input />
-                    </Form.Item>
-                  </Form.Item>
-                </>
-              )
-            }
-          </Form.Item>
+              <Form.Item noStyle>
+                <Form.Item
+                  name={["address", "zipCode"]}
+                  label="Zipcode"
+                  style={{ display: "inline-block", width: "30%" }}
+                  {...required}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  name={["address", "city"]}
+                  label="City"
+                  style={{ display: "inline-block", width: "70%", paddingLeft: "12px" }}
+                  {...required}
+                >
+                  <Input />
+                </Form.Item>
+              </Form.Item>
+            </>
+          </ConditionalFormItem>
         </fieldset>
 
         <Space>
@@ -168,34 +164,14 @@ export const ReplaceFamily = () => {
   );
 };
 
-export const HiddenField = (props) => (
-  <Form.Item name={props.name} noStyle>
-    <Input type="hidden" />
-  </Form.Item>
-);
-
-const required = { rules: [{ required: true, message: "Required" }] };
-
 function useInitialValues() {
   const { id } = useParams();
-  const { data } = useSWR(id ? `${API_ENDPOINT}/families/${id}` : null);
+  const { data } = useSWR(id ? `/families/${id}` : null);
   return (
     data ?? {
       id: uuid(),
       guardian1: { id: uuid() },
-      guardian2: { id: uuid() },
-      incomes: [] // TODO do we want to send incomes?
+      guardian2: { id: uuid() }
     }
   );
-}
-
-function useSubmit(existingFamily, navigate) {
-  const [putError, setPutError] = useState(false);
-  const onSubmit = (values) => {
-    axios
-      .put(`${API_ENDPOINT}/families/${values.id}`, values)
-      .then(() => navigate(`/families/${values.id}`))
-      .catch(() => setPutError(true));
-  };
-  return { putError, onSubmit };
 }

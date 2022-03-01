@@ -8,20 +8,13 @@ import { ReplaceFamily } from "./family/ReplaceFamily";
 import ErrorBoundary from "./ErrorBoundary";
 import { SWRConfig } from "swr";
 import axios from "axios";
-import { Layout } from "antd";
+import { Layout, Result } from "antd";
 
-export const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT;
 const { Header, Footer } = Layout;
 
 export function App() {
   return (
-    <ErrorBoundary
-      fallback={
-        <div className="alert alert-danger" role="alert">
-          Something went wrong!
-        </div>
-      }
-    >
+    <ErrorBoundary fallback={<Result status="error" title="Something went wrong!" />}>
       <Suspense fallback={<div>Loading...</div>}>
         <SWRConfig value={{ suspense: true, fetcher: (url) => axios.get(url).then((res) => res.data) }}>
           <Header className="header">

@@ -1,23 +1,25 @@
-package se.pamisoft.theinvoice
+package se.pamisoft.theinvoice.family
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
-import se.pamisoft.theinvoice.Delivery.POST
+import se.pamisoft.theinvoice.family.Delivery.POST
+import se.pamisoft.theinvoice.getOptionalLocalDate
+import se.pamisoft.theinvoice.getOptionalUuid
+import se.pamisoft.theinvoice.getRequiredUuid
 import java.sql.ResultSet
 import java.util.UUID
 
 @Repository
-class FamilyRepository(
-    private val db: NamedParameterJdbcTemplate,
-    private val guardianRepository: GuardianRepository,
-    private val incomeRepository: IncomeRepository
-) {
+class FamilyRepository(private val db: NamedParameterJdbcTemplate, private val guardianRepository: GuardianRepository) {
     fun findAll(): Iterable<Family> =
         db.query(QUERY) { rs, _ -> rs.getFamily() }
 
     fun findById(id: UUID): Family? =
         db.query("$QUERY where f.id = :id", mapOf("id" to id)) { rs, _ -> rs.getFamily() }
             .singleOrNull()
+
+    fun exist(id: UUID): Boolean =
+        db.queryForObject("select exists(select id from family where id = :id)", mapOf("id" to id), Boolean::class.java)!!
 
     fun upsert(family: Family) {
         guardianRepository.upsert(family.guardians)
@@ -62,7 +64,6 @@ class FamilyRepository(
         )
 
         if (family.guardian2 == null) guardianRepository.deleteOrphans()
-        incomeRepository.upsert(family)
     }
 
     private fun ResultSet.getFamily(): Family {
@@ -70,14 +71,14 @@ class FamilyRepository(
         return Family(
             id = getRequiredUuid("id"),
             guardian1 = getGuardian(1),
-            guardian2 = getUuid("guardian2_id")?.let { getGuardian(2) },
+            guardian2 = getOptionalUuid("guardian2_id")?.let { getGuardian(2) },
             personalIdentityNumber = PersonalIdentityNumber(getString("personal_identity_number")),
             delivery = delivery,
             email = getString("email"),
             address = if (delivery == POST) getAddress() else null,
             customerNumber = getString("customer_number"),
-            endedOn = getLocalDate("ended_on")
-        ).let { it.copy(incomes = incomeRepository.findFor(it)) }
+            endedOn = getOptionalLocalDate("ended_on")
+        )
     }
 }
 
