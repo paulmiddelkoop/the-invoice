@@ -9,7 +9,16 @@ import se.pamisoft.theinvoice.family.FamilyController
 
 @SpringBootTest
 @ActiveProfiles("test")
-class ApplicationIT(@Autowired private val familyController: FamilyController) {
+class ApplicationTestIT(@Autowired private val familyController: FamilyController) {
+	@Test
+	fun `Should load context`() {
+		assertThat(familyController).isNotNull
+	}
+}
+
+@SpringBootTest
+@ActiveProfiles("dev")
+class ApplicationDevelopmentIT(@Autowired private val familyController: FamilyController) {
 	@Test
 	fun `Should load context`() {
 		assertThat(familyController).isNotNull

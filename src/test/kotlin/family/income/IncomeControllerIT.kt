@@ -31,7 +31,7 @@ class IncomeControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
     @DisplayName("When replacing")
     inner class WhenReplacing {
         @Test
-        fun `should succeed when receive valid income`() {
+        fun `should succeed for valid income`() {
             val income = maxIncome(id = INCOME_ID)
 
             val result = mvc.put("/api/v1/families/$FAMILY_ID1/incomes/$INCOME_ID") {

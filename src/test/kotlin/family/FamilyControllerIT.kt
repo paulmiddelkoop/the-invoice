@@ -1,6 +1,8 @@
 package se.pamisoft.theinvoice.family
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.mockito.BDDMockito.given
 import org.mockito.BDDMockito.then
@@ -25,107 +27,115 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
     @MockBean
     private lateinit var syncCustomer: SyncCustomer
 
-    @Test
-    fun `Should replace`() {
-        val family = family(id = FAMILY_ID1)
-        val familyWithExternalReference = family.copy(customerNumber = "89")
-        given(syncCustomer(family)).willReturn(familyWithExternalReference)
+    @Nested
+    @DisplayName("When replacing")
+    inner class WhenReplacing {
+        @Test
+        fun `should succeed for valid family`() {
+            val family = family(id = FAMILY_ID1)
+            val familyWithExternalReference = family.copy(customerNumber = "89")
+            given(syncCustomer(family)).willReturn(familyWithExternalReference)
 
-        val result = mvc.put("/api/v1/families/$FAMILY_ID1") {
-            contentType = APPLICATION_JSON
-            content = objectMapper.writeValueAsString(family)
+            val result = mvc.put("/api/v1/families/$FAMILY_ID1") {
+                contentType = APPLICATION_JSON
+                content = objectMapper.writeValueAsString(family)
+            }
+
+            result.andExpect { status { isOk() } }
+            then(syncCustomer).should().invoke(family)
+            then(familyRepository).should().upsert(familyWithExternalReference)
         }
 
-        result.andExpect { status { isOk() } }
-        then(syncCustomer).should().invoke(family)
-        then(familyRepository).should().upsert(familyWithExternalReference)
+        @Test
+        fun `should fail when id in body does not match id in path`() {
+            val result = mvc.put("/api/v1/families/$FAMILY_ID1") {
+                contentType = APPLICATION_JSON
+                content = objectMapper.writeValueAsString(family(id = FAMILY_ID2))
+            }
+
+            result.andExpect { status { isBadRequest() } }
+        }
     }
 
-    @Test
-    fun `Should fail replace when id in body does not match id in path`() {
-        val result = mvc.put("/api/v1/families/$FAMILY_ID1") {
-            contentType = APPLICATION_JSON
-            content = objectMapper.writeValueAsString(family(id = FAMILY_ID2))
+    @Nested
+    @DisplayName("When get one")
+    inner class WhenGetOne {
+        @Test
+        fun `should return 404 when requesting unknown family`() {
+            val result = mvc.get("/api/v1/families/${randomUUID()}")
+
+            result.andExpect { status { isNotFound() } }
         }
 
-        result.andExpect { status { isBadRequest() } }
-    }
+        @Test
+        fun `should return family when requesting known family with required fields`() {
+            given(familyRepository.findById(FAMILY_ID1)).willReturn(singleParentFamily(id = FAMILY_ID1))
 
-    @Test
-    fun `Should return 404 when requesting unknown family`() {
-        val result = mvc.get("/api/v1/families/${randomUUID()}")
+            val result = mvc.get("/api/v1/families/$FAMILY_ID1")
 
-        result.andExpect { status { isNotFound() } }
-    }
-
-    @Test
-    fun `Should return family when requesting known family with required fields`() {
-        given(familyRepository.findById(FAMILY_ID1)).willReturn(singleParentFamily(id = FAMILY_ID1))
-
-        val result = mvc.get("/api/v1/families/$FAMILY_ID1")
-
-        result.thenJsonResultIs(
-            """
-            {
-              "id": "$FAMILY_ID1",
-              "name": "John Doe",
-              "guardian1": {
-                "id": "$GUARDIAN_ID1",
-                "firstName": "John",
-                "lastName": "Doe"
-              },
-              "guardian2": null,
-              "personalIdentityNumber": "19890201-3286",
-              "delivery": "E_INVOICE",
-              "email": "john@gmail.com",
-              "address": null,
-              "customerNumber": "80",
-              "endedOn": null,
-              "singleParent": true
-            }"""
-        )
-    }
-
-    @Test
-    fun `Should return family when requesting known family with all fields`() {
-        given(familyRepository.findById(FAMILY_ID1)).willReturn(
-            family(
-                id = FAMILY_ID1,
-                delivery = POST,
-                endedOn = NOW
+            result.thenJsonResultIs(
+                """
+                {
+                  "id": "$FAMILY_ID1",
+                  "name": "John Doe",
+                  "guardian1": {
+                    "id": "$GUARDIAN_ID1",
+                    "firstName": "John",
+                    "lastName": "Doe"
+                  },
+                  "guardian2": null,
+                  "personalIdentityNumber": "19890201-3286",
+                  "delivery": "E_INVOICE",
+                  "email": "john@gmail.com",
+                  "address": null,
+                  "customerNumber": "80",
+                  "endedOn": null,
+                  "singleParent": true
+                }"""
             )
-        )
+        }
 
-        val result = mvc.get("/api/v1/families/$FAMILY_ID1")
+        @Test
+        fun `should return family when requesting known family with all fields`() {
+            given(familyRepository.findById(FAMILY_ID1)).willReturn(
+                family(
+                    id = FAMILY_ID1,
+                    delivery = POST,
+                    endedOn = NOW
+                )
+            )
 
-        result.thenJsonResultIs(
-            """
-            {
-              "id": "$FAMILY_ID1",
-              "name": "John & Jane Doe",
-              "guardian1": {
-                "id": "$GUARDIAN_ID1",
-                "firstName": "John",
-                "lastName": "Doe"
-              },
-              "guardian2": {
-                "id": "$GUARDIAN_ID2",
-                "firstName": "Jane",
-                "lastName": "Doe"
-              },
-              "personalIdentityNumber": "19890201-3286",
-              "delivery": "POST",
-              "email": "john@gmail.com",
-              "address": {
-                "address": "Main street 42",
-                "zipCode": "10014",
-                "city": "New York"
-              },
-              "customerNumber": "80",
-              "endedOn": $NOW,
-              "singleParent": false
-            }"""
-        )
+            val result = mvc.get("/api/v1/families/$FAMILY_ID1")
+
+            result.thenJsonResultIs(
+                """
+                {
+                  "id": "$FAMILY_ID1",
+                  "name": "John & Jane Doe",
+                  "guardian1": {
+                    "id": "$GUARDIAN_ID1",
+                    "firstName": "John",
+                    "lastName": "Doe"
+                  },
+                  "guardian2": {
+                    "id": "$GUARDIAN_ID2",
+                    "firstName": "Jane",
+                    "lastName": "Doe"
+                  },
+                  "personalIdentityNumber": "19890201-3286",
+                  "delivery": "POST",
+                  "email": "john@gmail.com",
+                  "address": {
+                    "address": "Main street 42",
+                    "zipCode": "10014",
+                    "city": "New York"
+                  },
+                  "customerNumber": "80",
+                  "endedOn": $NOW,
+                  "singleParent": false
+                }"""
+            )
+        }
     }
 
     @Test
