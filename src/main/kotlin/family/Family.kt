@@ -39,7 +39,7 @@ data class Family(
     } ?: guardian1.name
 
     init {
-        require(delivery != POST || address != null) { "Address is required when using post delivery. " }
+        require(delivery != POST || address != null) { "Address is required when using post delivery." }
     }
 }
 
