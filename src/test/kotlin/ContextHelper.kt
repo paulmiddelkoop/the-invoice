@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.TestPropertySource
 import se.pamisoft.theinvoice.family.FamilyController
 
 @SpringBootTest
@@ -18,7 +19,9 @@ class ApplicationTestIT(@Autowired private val familyController: FamilyControlle
 
 @SpringBootTest
 @ActiveProfiles("dev")
+@TestPropertySource(properties = ["fortnox.accessToken=x", "fortnox.clientSecret=y"])
 class ApplicationDevelopmentIT(@Autowired private val familyController: FamilyController) {
+
 	@Test
 	fun `Should load context`() {
 		assertThat(familyController).isNotNull
