@@ -126,7 +126,7 @@ class FamilyControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
                   "delivery": "POST",
                   "email": "john@gmail.com",
                   "address": {
-                    "address": "Main street 42",
+                    "address": "Main Street 42",
                     "zipCode": "10014",
                     "city": "New York"
                   },

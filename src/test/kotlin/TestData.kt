@@ -14,7 +14,7 @@ fun guardian(
 ) = Guardian(id, firstName, lastName)
 
 fun address(
-    address: String = "Main street 42",
+    address: String = "Main Street 42",
     zipCode: String = "10014",
     city: String = "New York"
 ) = Address(address, zipCode, city)
