@@ -18,8 +18,8 @@ class ApplicationTestIT(@Autowired private val familyController: FamilyControlle
 }
 
 @SpringBootTest
+@TestPropertySource("classpath:application-test.properties")
 @ActiveProfiles("dev")
-@TestPropertySource(properties = ["fortnox.accessToken=x", "fortnox.clientSecret=y"])
 class ApplicationDevelopmentIT(@Autowired private val familyController: FamilyController) {
 
 	@Test

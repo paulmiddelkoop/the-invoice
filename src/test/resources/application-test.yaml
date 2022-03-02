@@ -1,8 +1,0 @@
-spring.datasource:
-  url: jdbc:postgresql://localhost:5432/the_invoice
-  username: the_invoice
-  password: the_invoice
-
-fortnox:
-  accessToken: x
-  clientSecret: y
