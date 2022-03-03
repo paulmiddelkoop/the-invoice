@@ -1,47 +1,40 @@
 package se.pamisoft.theinvoice.family
 
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonPropertyOrder
 import dev.personnummer.Personnummer
 import se.pamisoft.theinvoice.family.Delivery.POST
 import java.time.LocalDate
 import java.util.UUID
 
-@JsonPropertyOrder(
-    "id",
-    "name",
-    "guardian1",
-    "guardian2",
-    "personalIdentityNumber",
-    "delivery",
-    "email",
-    "address",
-    "customerNumber",
-    "endedOn"
-)
 data class Family(
     val id: UUID = UUID.randomUUID(),
     val guardian1: Guardian,
     val guardian2: Guardian?,
     val personalIdentityNumber: PersonalIdentityNumber,
-    val delivery: Delivery,
     val email: String,
+    val delivery: Delivery,
     val address: Address? = null,
-    val customerNumber: String? = null,
+    val customerNumber: CustomerNumber,
     val endedOn: LocalDate? = null
 ) {
     @JsonIgnore
     val guardians = listOfNotNull(guardian1, guardian2)
+    @Suppress("unused")
     val singleParent = guardian2 == null
-
-    val name = guardian2?.let {
-        "${if (guardian1.lastName == guardian2.lastName) guardian1.firstName else guardian1.name} & ${guardian2.name}"
-    } ?: guardian1.name
+    val name = familyName(guardian1, guardian2)
 
     init {
         require(delivery != POST || address != null) { "Address is required when using post delivery." }
     }
 }
+
+fun familyName(guardian1: Guardian, guardian2: Guardian?) =
+    guardian2?.let {
+        "${if (guardian1.lastName == guardian2.lastName) guardian1.firstName else guardian1.name} & ${guardian2.name}"
+    } ?: guardian1.name
+
+@JvmInline
+value class CustomerNumber(val value: String)
 
 @JvmInline
 value class PersonalIdentityNumber private constructor(val value: String) {

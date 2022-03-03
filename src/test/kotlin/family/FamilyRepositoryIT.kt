@@ -19,30 +19,29 @@ class FamilyRepositoryIT(@Autowired private val repository: FamilyRepository, @A
     inner class WhenUpserting {
         @Test
         fun `should insert when family is new and has required fields`() {
-            val family = singleParentFamily(id = FAMILY_ID1)
+            val family = singleParentFamily()
 
             repository.upsert(family)
 
-            assertThat(repository.findById(FAMILY_ID1)).isEqualTo(family)
+            assertThat(stored(family)).isEqualTo(family)
         }
 
         @Test
         fun `should insert when family is new and has all fields`() {
-            val family =
-                family(id = FAMILY_ID1, delivery = POST, address = address(), endedOn = now())
+            val family = family(delivery = POST, address = address(), endedOn = now())
 
             repository.upsert(family)
 
-            assertThat(repository.findById(FAMILY_ID1)).isEqualTo(family)
+            assertThat(stored(family)).isEqualTo(family)
         }
 
         @Test
         fun `should update when family exists and is changed`() {
-            val family = givenFamily(family(id = FAMILY_ID1, endedOn = null))
+            val family = givenFamily(family(endedOn = null))
 
             repository.upsert(family.copy(endedOn = NOW))
 
-            assertThat(repository.findById(FAMILY_ID1)?.endedOn).isEqualTo(NOW)
+            assertThat(stored(family)?.endedOn).isEqualTo(NOW)
         }
 
         @Test
@@ -53,6 +52,8 @@ class FamilyRepositoryIT(@Autowired private val repository: FamilyRepository, @A
 
             assertThat(countRowsInTableWhere(db, "guardian", "id = '$GUARDIAN_ID2'")).isEqualTo(0)
         }
+
+        private fun stored(family: Family) = repository.findById(family.id)
     }
 
     @Test
@@ -70,9 +71,9 @@ class FamilyRepositoryIT(@Autowired private val repository: FamilyRepository, @A
     inner class WhenExists {
         @Test
         fun `should return true if exists`() {
-            givenFamily(family(id = FAMILY_ID1))
+            val family = givenFamily(family())
 
-            val exists = repository.exist(FAMILY_ID1)
+            val exists = repository.exist(family.id)
 
             assertThat(exists).isTrue
         }

@@ -33,7 +33,7 @@ class IncomeRepositoryIT(
 
         @Test
         fun `should insert income with amount`() {
-            val income = income(amount = 40_000)
+            val income = income(40_000)
 
             incomeRepository.upsert(income, FAMILY_ID1)
 

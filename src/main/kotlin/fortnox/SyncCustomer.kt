@@ -7,8 +7,9 @@ import org.springframework.http.HttpMethod.PUT
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBody
+import se.pamisoft.theinvoice.family.CustomerNumber
 import se.pamisoft.theinvoice.family.Delivery
-import se.pamisoft.theinvoice.family.Family
+import se.pamisoft.theinvoice.family.FamilyDto
 import se.pamisoft.theinvoice.fortnox.CustomerType.PRIVATE
 
 private val logger = logger {}
@@ -17,7 +18,7 @@ private val logger = logger {}
 class SyncCustomer(webClientBuilder: WebClient.Builder, properties: FortnoxProperties) {
     private val webClient: WebClient = webClientBuilder.baseUrl("${properties.url}/customers").build()
 
-    operator fun invoke(family: Family): Family = runBlocking {
+    operator fun invoke(family: FamilyDto): CustomerNumber = runBlocking {
         val httpMethod = if (family.customerNumber == null) POST else PUT
         logger.info { "$httpMethod family ${family.name} in Fortnox." }
 
@@ -26,15 +27,15 @@ class SyncCustomer(webClientBuilder: WebClient.Builder, properties: FortnoxPrope
             .uri("/${family.customerNumber}".takeIf { httpMethod == PUT }.orEmpty())
             .bodyValue(CustomerHolder(family.toCustomer(true)))
             .retrieve()
-            .awaitBody<CustomerHolder>()
-            .let { family.copy(customerNumber = it.customer.customerNumber!!) }
+            .awaitBody<CustomerHolder>().customer.customerNumber!!
+            .let { CustomerNumber(it) }
     }
 }
 
 // TODO fix active
-private fun Family.toCustomer(active: Boolean) =
+private fun FamilyDto.toCustomer(active: Boolean) =
     Customer(
-        customerNumber = customerNumber,
+        customerNumber = customerNumber?.value,
         name = name,
         organisationNumber = personalIdentityNumber.value,
         email = email,
@@ -46,7 +47,7 @@ private fun Family.toCustomer(active: Boolean) =
         active = active
     )
 
-private fun Family.toDefaultDeliveryTypes() =
+private fun FamilyDto.toDefaultDeliveryTypes() =
     DefaultDeliveryTypes(
         invoice = when (delivery) {
             Delivery.E_INVOICE -> DefaultDeliveryType.ELECTRONICINVOICE
@@ -54,7 +55,6 @@ private fun Family.toDefaultDeliveryTypes() =
             Delivery.EMAIL -> DefaultDeliveryType.EMAIL
         }
     )
-
 
 private data class CustomerHolder(val customer: Customer)
 
@@ -83,6 +83,7 @@ private enum class DefaultDeliveryType {
     ELECTRONICINVOICE
 }
 
+@Suppress("unused")
 private enum class CustomerType {
     PRIVATE,
     COMPANY

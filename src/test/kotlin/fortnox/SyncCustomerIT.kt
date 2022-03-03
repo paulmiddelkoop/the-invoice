@@ -14,26 +14,37 @@ import org.springframework.http.HttpMethod.PUT
 import org.springframework.http.MediaType.APPLICATION_JSON_VALUE
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
-import se.pamisoft.theinvoice.family
+import se.pamisoft.theinvoice.CUSTOMER_NUMBER
+import se.pamisoft.theinvoice.address
 import se.pamisoft.theinvoice.family.Delivery
 import se.pamisoft.theinvoice.family.Delivery.E_INVOICE
+import se.pamisoft.theinvoice.family.PersonalIdentityNumber
+import se.pamisoft.theinvoice.familyDto
+import se.pamisoft.theinvoice.guardian
 
 @SpringBootTest
 class SyncCustomerIT(@Autowired private val syncCustomer: SyncCustomer) {
     @Test
     fun `Should create customer`() {
         mockWebServer.givenJsonResponse("/customer.json")
-        val family = family(delivery = Delivery.POST, customerNumber = null)
+        val family = familyDto(
+            guardian1 = guardian("John Doe"),
+            guardian2 = guardian("Jane Doe"),
+            personalIdentityNumber = PersonalIdentityNumber("19890201-3286"),
+            email = "john@gmail.com",
+            delivery = Delivery.POST,
+            address = address("Main Street 42", "10014", "New York"),
+            customerNumber = null
+        )
 
-        val syncedFamily = syncCustomer(family)
+        val customerNumber = syncCustomer(family)
 
-        assertThat(syncedFamily).isEqualTo(family.copy(customerNumber = "98"))
+        assertThat(customerNumber).isEqualTo(CUSTOMER_NUMBER)
         with(mockWebServer.takeRequest()) {
             assertThat(method).isEqualTo(POST.name)
             assertThat(path).isEqualTo("/customers")
             assertEquals(
-                body.readUtf8(),
-                """  {
+                body.readUtf8(), """  {
                       "Customer": {
                         "CustomerNumber": "API_BLANK",
                         "Name": "John & Jane Doe",
@@ -49,8 +60,7 @@ class SyncCustomerIT(@Autowired private val syncCustomer: SyncCustomer) {
                         "City": "New York",
                         "Active": true
                       }
-                    }""",
-                true
+                    }""", true
             )
         }
     }
@@ -58,12 +68,12 @@ class SyncCustomerIT(@Autowired private val syncCustomer: SyncCustomer) {
     @Test
     fun `Should update customer`() {
         mockWebServer.givenJsonResponse("/customer.json")
-        val family = family(customerNumber = "98", delivery = E_INVOICE)
+        val family = familyDto(customerNumber = CUSTOMER_NUMBER, delivery = E_INVOICE)
 
-        val syncedFamily = syncCustomer(family)
+        val customerNumber = syncCustomer(family)
 
         assertThat(mockWebServer.takeRequest().method).isEqualTo(PUT.name)
-        assertThat(syncedFamily).isEqualTo(family)
+        assertThat(customerNumber).isEqualTo(CUSTOMER_NUMBER)
     }
 
     @Suppress("unused")
@@ -83,9 +93,7 @@ class SyncCustomerIT(@Autowired private val syncCustomer: SyncCustomer) {
     }
 }
 
-private fun MockWebServer.givenJsonResponse(fileName: String) =
-    enqueue(
-        MockResponse()
-            .setBody(this::class.java.getResource(fileName)!!.readText())
-            .addHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
-    )
+private fun MockWebServer.givenJsonResponse(fileName: String) = enqueue(
+    MockResponse().setBody(this::class.java.getResource(fileName)!!.readText())
+        .addHeader(CONTENT_TYPE, APPLICATION_JSON_VALUE)
+)

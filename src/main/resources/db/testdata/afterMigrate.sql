@@ -17,4 +17,4 @@ insert into guardian values ('262c5ce5-c0ca-4560-a98c-f772d0b3f212', 'Paul', 'Mi
 
 insert into family
 values ('b7b07c6e-8f35-4dcb-a062-150bd8e999b9', '262c5ce5-c0ca-4560-a98c-f772d0b3f212',
-       null, '19890201-3286', 'paul@gmail.com', 'email', '860101-0963');
+       null, '19890201-3286', 'paul@gmail.com', 'email', '81');

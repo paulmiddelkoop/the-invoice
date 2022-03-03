@@ -61,13 +61,7 @@ class IncomeControllerIT(@Autowired private val mvc: MockMvc, @Autowired private
         fun `should return incomes when exist`() {
             given(familyRepository.exist(FAMILY_ID1)).willReturn(true)
             given(incomeRepository.findFor(FAMILY_ID1)).willReturn(
-                listOf(
-                    income(
-                        id = INCOME_ID,
-                        amount = 40_000,
-                        changedOn = LocalDate.of(2021, 2, 28)
-                    )
-                )
+                listOf(income(40_000, LocalDate.of(2021, 2, 28), INCOME_ID))
             )
 
             val result = mvc.get("/api/v1/families/$FAMILY_ID1/incomes")

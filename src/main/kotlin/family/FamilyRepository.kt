@@ -76,7 +76,7 @@ class FamilyRepository(private val db: NamedParameterJdbcTemplate, private val g
             delivery = delivery,
             email = getString("email"),
             address = if (delivery == POST) getAddress() else null,
-            customerNumber = getString("customer_number"),
+            customerNumber = CustomerNumber(getString("customer_number")),
             endedOn = getOptionalLocalDate("ended_on")
         )
     }
@@ -100,7 +100,7 @@ private fun Family.toMap() = mapOf(
     "address" to address?.address,
     "zip_code" to address?.zipCode,
     "city" to address?.city,
-    "customer_number" to customerNumber,
+    "customer_number" to customerNumber.value,
     "ended_on" to endedOn
 )
 

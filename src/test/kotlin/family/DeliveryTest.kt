@@ -1,9 +1,8 @@
-package family
+package se.pamisoft.theinvoice.family
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import se.pamisoft.theinvoice.family.Delivery
 
 class DeliveryTest {
     @Test

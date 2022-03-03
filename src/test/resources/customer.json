@@ -1,6 +1,6 @@
 {
   "Customer": {
-    "@url": "https:\/\/api.fortnox.se\/3\/customers\/98",
+    "@url": "https:\/\/api.fortnox.se\/3\/customers\/80",
     "Address1": "",
     "Address2": null,
     "City": "",
@@ -10,7 +10,7 @@
     "CostCenter": null,
     "CountryCode": null,
     "Active": true,
-    "CustomerNumber": "98",
+    "CustomerNumber": "80",
     "DefaultDeliveryTypes": {
       "Invoice": "ELECTRONICINVOICE",
       "Order": "PRINT",

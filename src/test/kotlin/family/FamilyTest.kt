@@ -23,8 +23,8 @@ class FamilyTest {
         @Test
         fun `should not repeat last name when last names are equal`() {
             val familyWithSameLastName = family(
-                guardian1 = guardian(firstName = "John", lastName = "Doe"),
-                guardian2 = guardian(firstName = "Jane", lastName = "Doe")
+                guardian1 = guardian("John Doe"),
+                guardian2 = guardian("Jane Doe")
             )
 
             val name = familyWithSameLastName.name
@@ -35,8 +35,8 @@ class FamilyTest {
         @Test
         fun `should concat when last name are not equal`() {
             val familyWithSameLastName = family(
-                guardian1 = guardian(firstName = "Paul", lastName = "Middelkoop"),
-                guardian2 = guardian(firstName = "Josje", lastName = "de Jong")
+                guardian1 = guardian("Paul Middelkoop"),
+                guardian2 = guardian("Josje de Jong")
             )
 
             val name = familyWithSameLastName.name
