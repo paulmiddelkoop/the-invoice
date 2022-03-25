@@ -14,6 +14,7 @@ import se.pamisoft.theinvoice.fortnox.CustomerType.PRIVATE
 
 private val logger = logger {}
 
+// TODO do not create customers in Fortnox if they are separated
 @Service
 class SyncCustomer(webClientBuilder: WebClient.Builder, properties: FortnoxProperties) {
     private val webClient: WebClient = webClientBuilder.baseUrl("${properties.url}/customers").build()

@@ -9,6 +9,7 @@ import ErrorBoundary from "./ErrorBoundary";
 import { SWRConfig } from "swr";
 import axios from "axios";
 import { Layout, Result } from "antd";
+import { IconContext } from "react-icons";
 
 const { Header, Footer } = Layout;
 
@@ -26,15 +27,17 @@ export function App() {
             </h1>
           </Header>
           <section className="content">
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Navigate replace to="/families" />} />
-                <Route path="/families" element={<Families />} />
-                <Route path="/families/:id" element={<Family />} />
-                <Route path="/families/:id/edit" element={<ReplaceFamily />} />
-                <Route path="/families/create" element={<ReplaceFamily />} />
-              </Routes>
-            </BrowserRouter>
+            <IconContext.Provider value={{ className: "react-icons" }}>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Navigate replace to="/families" />} />
+                  <Route path="/families" element={<Families />} />
+                  <Route path="/families/:id" element={<Family />} />
+                  <Route path="/families/:id/edit" element={<ReplaceFamily />} />
+                  <Route path="/families/create" element={<ReplaceFamily />} />
+                </Routes>
+              </BrowserRouter>
+            </IconContext.Provider>
           </section>
           <Footer className="footer">©2022 Paul Middelkoop</Footer>
         </SWRConfig>

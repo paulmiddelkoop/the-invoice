@@ -2,10 +2,12 @@ import useSWR from "swr";
 import { useParams } from "react-router-dom";
 import { NavigationButton } from "../util/NavigationButton";
 import { Delivery } from "./Delivery";
-import { Col, Row } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { Col, Row, Space } from "antd";
 import React from "react";
 import { IncomeList } from "./Income";
+import { ChildList } from "./ChildList";
+import Title from "antd/es/typography/Title";
+import { AiOutlineEdit } from "react-icons/ai";
 
 export const Family = () => {
   const { id } = useParams();
@@ -13,40 +15,47 @@ export const Family = () => {
 
   return (
     <>
-      <h1>Family {data.name}</h1>
+      <Title level={2}>Family {data.name}</Title>
 
-      <NavigationButton to={`/families/${id}/edit`} icon={<EditOutlined />} tooltip="Edit" />
+      <Space direction="vertical" size="middle">
+        <NavigationButton to={`/families/${id}/edit`} icon={<AiOutlineEdit />} tooltip="Edit" />
 
-      <Row>
-        <Header>Personal identity number</Header>
-        <Value>{data.personalIdentityNumber}</Value>
-      </Row>
-      <Row>
-        <Header>Email</Header>
-        <Value>
-          <a href={`mailto: ${data.email}`} target="_blank" rel="noreferrer">
-            {data.email}{" "}
-          </a>
-        </Value>
-      </Row>
-      <Row>
-        <Header>Delivery</Header>
-        <Value>{Delivery[data.delivery].description}</Value>
-      </Row>
-      {data.address && (
-        <Row>
-          <Header>Address</Header>
-          <Value>
-            {data.address.address}, {data.address.zipCode} {data.address.city}
-          </Value>
-        </Row>
-      )}
-      <Row>
-        <Header>Customer number</Header>
-        <Value>{data.customerNumber}</Value>
-      </Row>
+        <div>
+          <Title level={3}>Invoice</Title>
+          <Row>
+            <Header>Personal identity number</Header>
+            <Value>{data.personalIdentityNumber}</Value>
+          </Row>
+          <Row>
+            <Header>Email</Header>
+            <Value>
+              <a href={`mailto: ${data.email}`} target="_blank" rel="noreferrer">
+                {data.email}{" "}
+              </a>
+            </Value>
+          </Row>
+          <Row>
+            <Header>Delivery</Header>
+            <Value>{Delivery[data.delivery].description}</Value>
+          </Row>
+          {data.address && (
+            <Row>
+              <Header>Address</Header>
+              <Value>
+                {data.address.address}, {data.address.zipCode} {data.address.city}
+              </Value>
+            </Row>
+          )}
+          <Row>
+            <Header>Customer number</Header>
+            <Value>{data.customerNumber}</Value>
+          </Row>
+        </div>
 
-      <IncomeList familyId={id} />
+        <ChildList familyId={id} />
+
+        <IncomeList familyId={id} />
+      </Space>
     </>
   );
 };

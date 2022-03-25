@@ -1,12 +1,15 @@
-import { Alert, Button, Checkbox, Collapse, DatePicker, Form, Input, List, Space, Tooltip } from "antd";
+import { Alert, Avatar, Button, Checkbox, Collapse, DatePicker, Form, Input, List, Space } from "antd";
 import React, { useState } from "react";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import { ConditionalFormItem } from "../util/ConditionalFormItem";
 import useSWR, { mutate } from "swr";
 import { v4 as uuid } from "uuid";
 import { HiddenField, required } from "../util/FormUtils";
 import moment from "moment";
 import useAxios from "axios-hooks";
+import Title from "antd/es/typography/Title";
+import { AiOutlineDelete, AiOutlineEdit, AiOutlinePlus } from "react-icons/ai";
+import { GiMoneyStack } from "react-icons/gi";
+import { TooltipButton } from "../util/TooltipButton";
 
 export const IncomeList = (props) => {
   const url = `/families/${props.familyId}/incomes`;
@@ -27,60 +30,67 @@ export const IncomeList = (props) => {
   const { Panel } = Collapse;
 
   return (
-    <Collapse>
-      <Panel header="Income" key="income">
-        <Space direction="vertical">
-          {deleteError && <Alert message="Error while communicating with server!" type="error" />}
-          {editIncomeId && !data.find((income) => income.id === editIncomeId) ? (
-            <IncomeForm callApi={callApi} setEditIncomeId={setEditIncomeId} initialValues={{ id: editIncomeId }} />
-          ) : (
-            <Button onClick={() => setEditIncomeId(uuid())} type="primary" shape="circle" icon={<PlusOutlined />} />
-          )}
-        </Space>
-        <List
-          itemLayout="horizontal"
-          dataSource={data}
-          renderItem={(item) => (
-            <List.Item>
-              {editIncomeId === item.id ? (
-                <IncomeForm
-                  callApi={callApi}
-                  setEditIncomeId={setEditIncomeId}
-                  initialValues={{ ...item, ...{ startsOn: moment(item.startsOn) } }}
-                />
-              ) : (
-                <>
-                  <List.Item.Meta
-                    title={item.max ? "Max income" : formatter.format(item.amount)}
-                    description={`Start: ${item.startsOn}`}
+    <>
+      <Title level={3}>Income</Title>
+      <Collapse>
+        <Panel key="income">
+          <Space direction="vertical">
+            {deleteError && <Alert message="Error while communicating with server!" type="error" />}
+            {editIncomeId && !data.find((income) => income.id === editIncomeId) ? (
+              <IncomeForm callApi={callApi} setEditIncomeId={setEditIncomeId} initialValues={{ id: editIncomeId }} />
+            ) : (
+              <TooltipButton
+                onClick={() => setEditIncomeId(uuid())}
+                type="primary"
+                icon={<AiOutlinePlus />}
+                tooltip="New income"
+              />
+            )}
+          </Space>
+          <List
+            itemLayout="horizontal"
+            dataSource={data}
+            renderItem={(item) => (
+              <List.Item>
+                {editIncomeId === item.id ? (
+                  <IncomeForm
+                    callApi={callApi}
+                    setEditIncomeId={setEditIncomeId}
+                    initialValues={{ ...item, ...{ startsOn: moment(item.startsOn) } }}
                   />
-                  {editIncomeId !== item.id && (
-                    <Space>
-                      <Tooltip title="Edit">
-                        <Button
+                ) : (
+                  <>
+                    <List.Item.Meta
+                      title={item.max ? "Max income" : formatter.format(item.amount)}
+                      description={`Start: ${item.startsOn}`}
+                      avatar={<Avatar src={<GiMoneyStack size="2em" color="grey" />} />}
+                    />
+                    {editIncomeId !== item.id && (
+                      <Space>
+                        <TooltipButton
                           onClick={() => setEditIncomeId(item.id)}
                           type="primary"
-                          shape="circle"
-                          icon={<EditOutlined />}
+                          size="small"
+                          icon={<AiOutlineEdit />}
+                          tooltip="Edit income"
                         />
-                      </Tooltip>
-                      <Tooltip title="Delete">
-                        <Button
+                        <TooltipButton
                           onClick={() => deleteIncome(item.id)}
                           type="danger"
-                          shape="circle"
-                          icon={<DeleteOutlined />}
+                          size="small"
+                          icon={<AiOutlineDelete />}
+                          tooltip="Remove income"
                         />
-                      </Tooltip>
-                    </Space>
-                  )}
-                </>
-              )}
-            </List.Item>
-          )}
-        />
-      </Panel>
-    </Collapse>
+                      </Space>
+                    )}
+                  </>
+                )}
+              </List.Item>
+            )}
+          />
+        </Panel>
+      </Collapse>
+    </>
   );
 };
 

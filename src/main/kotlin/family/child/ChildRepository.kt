@@ -1,7 +1,9 @@
-package se.pamisoft.theinvoice.family
+package se.pamisoft.theinvoice.family.child
 
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
+import se.pamisoft.theinvoice.family.Family
+import se.pamisoft.theinvoice.family.FamilyRepository
 import se.pamisoft.theinvoice.getRequiredLocalDate
 import se.pamisoft.theinvoice.getRequiredUuid
 import java.sql.ResultSet
@@ -20,7 +22,7 @@ class ChildRepository(private val db: NamedParameterJdbcTemplate, private val fa
             child.toMap()
         )
 
-    fun findForFamily(family: Family): List<Child> =
+    fun findFor(family: Family): List<Child> =
         db.query(
             """
             |select * from child 

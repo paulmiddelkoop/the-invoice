@@ -3,6 +3,7 @@ package se.pamisoft.theinvoice
 import se.pamisoft.theinvoice.family.*
 import se.pamisoft.theinvoice.family.Delivery.E_INVOICE
 import se.pamisoft.theinvoice.family.Delivery.POST
+import se.pamisoft.theinvoice.family.child.Child
 import se.pamisoft.theinvoice.family.income.Income
 import java.time.LocalDate
 import java.util.UUID
@@ -90,6 +91,7 @@ val FAMILY_ID1: UUID = randomUUID()
 val FAMILY_ID2: UUID = randomUUID()
 val GUARDIAN_ID1: UUID = randomUUID()
 val GUARDIAN_ID2: UUID = randomUUID()
+val CHILD_ID: UUID = randomUUID()
 val INCOME_ID: UUID = randomUUID()
 val PERSONAL_IDENTITY_NUMBER = PersonalIdentityNumber("19890201-3286")
 val CUSTOMER_NUMBER = CustomerNumber("80")

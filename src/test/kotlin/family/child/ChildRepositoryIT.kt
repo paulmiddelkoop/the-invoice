@@ -1,4 +1,4 @@
-package se.pamisoft.theinvoice.family
+package se.pamisoft.theinvoice.family.child
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.DisplayName
@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import se.pamisoft.theinvoice.*
+import se.pamisoft.theinvoice.family.Family
+import se.pamisoft.theinvoice.family.FamilyRepository
 
 @RepositoryTest
 class ChildRepositoryIT(
@@ -22,7 +24,7 @@ class ChildRepositoryIT(
 
             childRepository.upsert(child)
 
-            childRepository.findForFamily(parents).contains(child)
+            childRepository.findFor(parents).contains(child)
 
         }
 
@@ -33,7 +35,7 @@ class ChildRepositoryIT(
 
             childRepository.upsert(changedChild)
 
-            childRepository.findForFamily(changedChild.parents).contains(changedChild)
+            childRepository.findFor(changedChild.parents).contains(changedChild)
         }
     }
 
@@ -46,7 +48,7 @@ class ChildRepositoryIT(
             val child1 = givenChild(child("Karen", parents = parents))
             val child2 = givenChild(child("Julie", parents = parents))
 
-            val children = childRepository.findForFamily(parents)
+            val children = childRepository.findFor(parents)
 
             assertThat(children).containsExactlyInAnyOrder(child1, child2)
         }
@@ -63,7 +65,7 @@ class ChildRepositoryIT(
             val child1 = givenChild(child("Karen", parents = firstRelation))
             val child2 = givenChild(child("Julie", parents = secondRelation))
 
-            val children = childRepository.findForFamily(currentRelation)
+            val children = childRepository.findFor(currentRelation)
 
             assertThat(children).containsExactlyInAnyOrder(child1, child2)
         }

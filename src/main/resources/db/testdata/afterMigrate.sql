@@ -12,6 +12,12 @@ values ('843de92b-1498-4a66-9754-b91f1068adcc', 'ee7cd400-34fe-47a2-af45-bf09e96
 insert into income
 values ('22479378-aa40-439e-96e1-61f8871dcb5f', 'ee7cd400-34fe-47a2-af45-bf09e96ea536', false, 40000, '2021-01-01');
 
+insert into child
+values ('917a0625-2722-4b6b-a856-0f3fee932c35', 'ee7cd400-34fe-47a2-af45-bf09e96ea536', 'Molly', 'Doe', '2018-02-01');
+insert into child
+values ('4dc6810d-009f-42d8-b487-e7b45c7129bf', 'ee7cd400-34fe-47a2-af45-bf09e96ea536', 'Susan', 'Doe', '2016-06-01');
+
+
 -- Paul Middelkoop
 insert into guardian values ('262c5ce5-c0ca-4560-a98c-f772d0b3f212', 'Paul', 'Middelkoop');
 
