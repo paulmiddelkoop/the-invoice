@@ -2,7 +2,7 @@ import org.gradle.api.JavaVersion.VERSION_17
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.run.BootRun
 
-val jacocoVersion = "0.8.7"
+val jacocoVersion = "0.8.8"
 extra["netty.version"] = "4.1.74.Final"
 
 plugins {
