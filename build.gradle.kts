@@ -8,7 +8,7 @@ extra["netty.version"] = "4.1.74.Final"
 plugins {
 	id("org.springframework.boot") version "2.6.7"
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
-	id("org.flywaydb.flyway") version "8.5.8"
+	id("org.flywaydb.flyway") version "8.5.9"
 	kotlin("jvm") version "1.6.20"
 	kotlin("plugin.spring") version "1.6.21"
 	jacoco
