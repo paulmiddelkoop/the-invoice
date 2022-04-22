@@ -10,7 +10,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.0.11.RELEASE"
 	id("org.flywaydb.flyway") version "8.5.8"
 	kotlin("jvm") version "1.6.20"
-	kotlin("plugin.spring") version "1.6.20"
+	kotlin("plugin.spring") version "1.6.21"
 	jacoco
 }
 apply(plugin = "io.spring.dependency-management")
