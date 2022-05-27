@@ -38,7 +38,7 @@ dependencies {
 	implementation("org.postgresql:postgresql")
 	implementation("org.flywaydb:flyway-core")
 	implementation("dev.personnummer:personnummer:3.3.3")
-	implementation("io.github.microutils:kotlin-logging:2.1.21")
+	implementation("io.github.microutils:kotlin-logging:2.1.23")
 	implementation("io.netty:netty-resolver-dns-native-macos:${properties["netty.version"]}:osx-aarch_64")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:${dependencyManagement.importedProperties["mockito.version"]}")
