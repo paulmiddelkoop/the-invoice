@@ -42,7 +42,7 @@ dependencies {
 	implementation("io.netty:netty-resolver-dns-native-macos:${properties["netty.version"]}:osx-aarch_64")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:${dependencyManagement.importedProperties["mockito.version"]}")
-	testImplementation("com.squareup.okhttp3:mockwebserver:4.9.3")
+	testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
 	testImplementation("com.squareup.okhttp3:okhttp:4.9.3")
 	jacocoAnt("org.jacoco:org.jacoco.ant:$jacocoVersion")
 	jacocoAgent("org.jacoco:org.jacoco.agent:$jacocoVersion")
