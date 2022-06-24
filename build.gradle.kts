@@ -43,7 +43,7 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.mockito.kotlin:mockito-kotlin:${dependencyManagement.importedProperties["mockito.version"]}")
 	testImplementation("com.squareup.okhttp3:mockwebserver:4.10.0")
-	testImplementation("com.squareup.okhttp3:okhttp:4.9.3")
+	testImplementation("com.squareup.okhttp3:okhttp:4.10.0")
 	jacocoAnt("org.jacoco:org.jacoco.ant:$jacocoVersion")
 	jacocoAgent("org.jacoco:org.jacoco.agent:$jacocoVersion")
 	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
