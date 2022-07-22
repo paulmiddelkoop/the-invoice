@@ -6,7 +6,7 @@ val jacocoVersion = "0.8.8"
 extra["netty.version"] = "4.1.74.Final"
 
 plugins {
-	id("org.springframework.boot") version "2.7.1"
+	id("org.springframework.boot") version "2.7.2"
 	id("io.spring.dependency-management") version "1.0.12.RELEASE"
 	id("org.flywaydb.flyway") version "9.0.1"
 	kotlin("jvm") version "1.7.10"
